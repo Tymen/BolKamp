@@ -1,6 +1,7 @@
 package com.tvis;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class PickProcesMonitor extends JFrame{
     private JTable table1;
@@ -15,8 +16,8 @@ public class PickProcesMonitor extends JFrame{
     private PickMonitor pickMonitor;
 
     public PickProcesMonitor() {
+        pickMonitorPanel.setPreferredSize(new Dimension(300, 300));
         this.pickMonitor = new PickMonitor();
-        add(pickMonitor);
     }
 
     public JPanel getPickProcesMonitor() {
