@@ -7,5 +7,7 @@ public class Main {
         PickProces pickProces = new PickProces();
         PickProcesMonitor pickProcesMonitor = new PickProcesMonitor();
         MainFrame frame = new MainFrame(pickProces, pickProcesMonitor);
+
+        JSerialcomm comm = new JSerialcomm();
     }
 }
