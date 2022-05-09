@@ -2,9 +2,7 @@ package com.tvis;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class PickProces {
     private JLabel pickStatus;
@@ -17,8 +15,19 @@ public class PickProces {
     private JComboBox comboBox1;
     private JComboBox comboBox2;
 
+    private TspAlgoritme tspAlgoritme;
+    private ArrayList<Integer[]> dummyProductLocaties = new ArrayList<>();
+
     public PickProces () {
         createTable();
+        getTspAlgoritmes();
+        //set dummy locaties
+        dummyProductLocaties.add(new Integer[]{3, 2});
+        dummyProductLocaties.add(new Integer[]{2, 3});
+        dummyProductLocaties.add(new Integer[]{4, 2});
+        dummyProductLocaties.add(new Integer[]{3, 4});
+        dummyProductLocaties.add(new Integer[]{1, 2});
+        dummyProductLocaties.add(new Integer[]{1, 4});
     }
 
     public JPanel getPickProces() {
@@ -39,5 +48,24 @@ public class PickProces {
                 data,
                 new String[]
                         {"id", "amount", "description", "locatie", "doos"}        ));
+    }
+
+    private void getTspAlgoritmes() {
+        tspAlgoritme = new TspAlgoritme();
+        String[] algoritmes = tspAlgoritme.getAvailableAlgoritmes();
+
+        for (String algoritme: algoritmes) {
+            comboBox1.addItem(algoritme);
+        }
+    }
+
+    public void executeTspAlgoritme() {
+        if (comboBox1.getSelectedItem().toString().equals("Nearest Neighbour")) {
+            tspAlgoritme.NearestNeighbour(dummyProductLocaties);
+        } else if (comboBox1.getSelectedItem().toString().equals("Brute Force")) {
+            tspAlgoritme.BruteForce(dummyProductLocaties);
+        } else {
+            System.out.println("unknown algorithm");
+        }
     }
 }
