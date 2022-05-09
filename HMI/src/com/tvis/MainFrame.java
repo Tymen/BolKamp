@@ -55,6 +55,7 @@ public class MainFrame extends JFrame implements ActionListener {
         if(getSource == submitButton) {
             nextStep("selectOrder");
         }else {
+            pickProcesPanel.executeTspAlgoritme();
             nextStep("pickProcesMonitor");
         }
     }
