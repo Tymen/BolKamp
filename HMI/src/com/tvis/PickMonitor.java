@@ -5,11 +5,12 @@ import java.awt.*;
 
 public class PickMonitor extends JPanel {
     public PickMonitor() {
+        setBackground(Color.white);
         this.setPreferredSize(new Dimension(300, 300));
     }
 
     @Override
-    public void paintComponents(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawRect(0,0,750,120);
         g.setColor(Color.BLUE);

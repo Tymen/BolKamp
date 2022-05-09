@@ -16,8 +16,9 @@ public class PickProcesMonitor extends JFrame{
     private PickMonitor pickMonitor;
 
     public PickProcesMonitor() {
-        pickMonitorPanel.setPreferredSize(new Dimension(300, 300));
         this.pickMonitor = new PickMonitor();
+        pickMonitorPanel.add(this.pickMonitor);
+        pickMonitorPanel.revalidate();
     }
 
     public JPanel getPickProcesMonitor() {
