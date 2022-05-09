@@ -14,6 +14,8 @@ public class PickProces {
     private JLabel orderIdLabel;
     private JPanel pickProces;
     private JButton cancelButton;
+    private JComboBox comboBox1;
+    private JComboBox comboBox2;
 
     public PickProces () {
         createTable();

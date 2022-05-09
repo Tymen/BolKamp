@@ -13,7 +13,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private PickProces pickProcesPanel;
     private PickProcesMonitor pickProcesMonitorPanel;
-
+    private PickMonitor pickMonitor;
     public MainFrame (PickProces pickproces, PickProcesMonitor pickProcesMonitor) {
         setPickProces(pickproces);
         setPickProcesMonitor(pickProcesMonitor);
@@ -23,9 +23,10 @@ public class MainFrame extends JFrame implements ActionListener {
     public void setFrameSettings() {
         setTitle("Order Picker Bolkamp");
         setContentPane(mainPanel);
-        setSize(600,400);
+        setSize(1200,700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        this.pickMonitor = new PickMonitor();
         this.pickProcesPanel.getNextButton().addActionListener(this);
         submitButton.addActionListener(this);
 
