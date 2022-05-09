@@ -7,9 +7,13 @@ public class TspAlgoritme {
     //string array om de beschikbare tsp algoritmes op te halen.
     private String[] availableAlgoritmes = new String[]{"Nearest Neighbour", "Brute Force", "Ant Colony optimalization"};
 
+    //het kortste pad van het brute force algoritme
     private ArrayList<Integer[]> bruteForceShortestPath;
+
+    //de afstand van het kortste pad van het brute force algoritme
     private double bruteForceShortestPathDistance;
 
+    //getter voor beschikbare algoritmes
     public String[] getAvailableAlgoritmes() {
         return availableAlgoritmes;
     }
@@ -27,10 +31,12 @@ public class TspAlgoritme {
             Integer[] shortestPoint = new Integer[2];
             double shortestDis = 100;
             int indexOfShortestPoint = 0;
+
             //loop over overgebleven punten
             for (int j = 0; j < pointsCopy.size(); j++) {
                 double dis;
 
+                //bereken afstand tussen huidig punt en nieuw punt - kortste punt word opgeslagen
                 dis = measureDistance(currentPoint, pointsCopy.get(j));
                 if (dis < shortestDis) {
                     shortestPoint = pointsCopy.get(j);
@@ -62,8 +68,7 @@ public class TspAlgoritme {
 
     //TODO wordt gerealiseerd als er tijd over is.
     //ant colony optimalisatie - voert nearest neighbour uit en optimaliseert dit - optimalisatielengte bepaalt hoe lang het algoritme optimaliseert
-
-    public ArrayList<Integer[]> AntColonyOptimalization(ArrayList<Integer[]> punten) {
+    public ArrayList<Integer[]> AntColonyOptimalization(ArrayList<Integer[]> punten, int optimalisatieLengte) {
         Integer[] currentPoint = new Integer[]{1,1};
         int aantalPoints = punten.size();
         ArrayList<Integer[]> shortestPath = new ArrayList<>(aantalPoints);
