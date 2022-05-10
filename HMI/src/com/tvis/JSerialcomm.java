@@ -30,6 +30,10 @@ public class JSerialcomm extends JFrame implements ActionListener {
     private JButton backwardMotor;
     private JButton offMotor;
 
+    private JButton forward2;
+    private JButton backward2;
+    private JButton off2;
+
     // getCommPorts = krijg alle beschikbare communicatie poorten
     private SerialPort port[] = SerialPort.getCommPorts();
 
@@ -52,26 +56,35 @@ public class JSerialcomm extends JFrame implements ActionListener {
         setSize(300, 400);
         getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
 
-        // Buttons robot 1 (LED en Slider)
+//        // Buttons robot 1 (LED en Slider)
         name1 = new JLabel("Robot 1");
         name1.setBorder(new EmptyBorder(0, 100, 0, 125));
         openSerial = new JButton("connect");
         openSerial.addActionListener(this);
-        ledOn = new JButton("LED on");
-        ledOn.addActionListener(this);
-        ledOn2 = new JButton("LED2 on");
-        ledOn2.addActionListener(this);
-        slider = new JSlider();
-
-        // add buttons etc. of robot 1
+//        ledOn = new JButton("LED on");
+//        ledOn.addActionListener(this);
+//        ledOn2 = new JButton("LED2 on");
+//        ledOn2.addActionListener(this);
+//        slider = new JSlider();
+//
+//        // add buttons etc. of robot 1
         add(name1);
         serialBox1.setSelectedIndex(0);
         add(serialBox1);
         add(openSerial);
         serialBox2.setSelectedIndex(0);
-        add(slider);
-        add(ledOn);
-        add(ledOn2);
+//        add(slider);
+//        add(ledOn);
+//        add(ledOn2);
+        forward2 = new JButton("motor1 aan");
+        backward2 = new JButton("motor1 achter");
+        off2 = new JButton("motor1 uit");
+        forward2.addActionListener(this);
+        backward2.addActionListener(this);
+        off2.addActionListener(this);
+        add(forward2);
+        add(backward2);
+        add(off2);
 
         // Buttons robot 2 (motor besturen
         name2 = new JLabel("Robot 2");
@@ -202,6 +215,27 @@ public class JSerialcomm extends JFrame implements ActionListener {
                     } catch (IOException io) {
                         System.out.println("Failed to turn OFF");
                     }
+                }
+            }
+
+//            OutputStream ou1 = port1.getOutputStream();
+            if (e.getSource() == off2) {
+                try {
+                    ou1.write(107);
+                } catch (IOException io) {
+                    System.out.println("Failed to go backward");
+                }
+            } else if (e.getSource() == forward2) {
+                try {
+                    ou1.write(105);
+                } catch (IOException io) {
+                    System.out.println("Failed to turn off");
+                }
+            } else if (e.getSource() == backward2) {
+                try {
+                    ou1.write(106);
+                } catch (IOException io) {
+                    System.out.println("Failed to go forward");
                 }
             }
         }
