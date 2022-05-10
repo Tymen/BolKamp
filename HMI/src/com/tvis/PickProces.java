@@ -52,11 +52,13 @@ public class PickProces {
         }
     }
 
-    public void executeTspAlgoritme(ArrayList<Product> productList) {
+    public void executeTspAlgoritme(Order order) {
+        ArrayList<Product> productList = order.getProductList();
+
         if (comboBox1.getSelectedItem().toString().equals("Nearest Neighbour")) {
-            tspAlgoritme.NearestNeighbour(productList);
+            order.setShortestPath(tspAlgoritme.NearestNeighbour(productList));
         } else if (comboBox1.getSelectedItem().toString().equals("Brute Force")) {
-            tspAlgoritme.BruteForce(productList);
+            order.setShortestPath(tspAlgoritme.BruteForce(productList));
         } else {
             System.out.println("unknown algorithm");
         }

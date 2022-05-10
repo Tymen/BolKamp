@@ -6,6 +6,8 @@ public class Order {
     private int orderId;
     private ArrayList<Product> productList;
 
+    private ArrayList<Integer[]> shortestPath = new ArrayList<>();
+
     public Order(int orderId) {
         this.orderId = orderId;
         productList = new ArrayList<>();
@@ -19,5 +21,13 @@ public class Order {
 
     public ArrayList<Product> getProductList() {
         return productList;
+    }
+
+    public void setShortestPath(ArrayList<Integer[]> shortestPath) {
+        this.shortestPath = shortestPath;
+    }
+
+    public ArrayList<Integer[]> getShortestPath() {
+        return shortestPath;
     }
 }
