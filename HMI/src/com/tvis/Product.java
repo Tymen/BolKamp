@@ -15,4 +15,8 @@ public class Product {
         this.size = size;
         this.locatie = locatie;
     }
+
+    public Integer[] getLocatie() {
+        return locatie;
+    }
 }

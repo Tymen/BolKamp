@@ -19,11 +19,11 @@ public class TspAlgoritme {
     }
 
     //het nearest neighbour algoritme - geeft een pad terug
-    public ArrayList<Integer[]> NearestNeighbour(ArrayList<Integer[]> punten) {
+    public ArrayList<Integer[]> NearestNeighbour(ArrayList<Product> producten) {
         Integer[] currentPoint = new Integer[]{1,1};
-        int aantalPoints = punten.size();
+        int aantalPoints = producten.size();
         ArrayList<Integer[]> shortestPath = new ArrayList<>(aantalPoints);
-        ArrayList<Integer[]> pointsCopy = new ArrayList<>(punten);
+        ArrayList<Integer[]> pointsCopy = productListToIntArray(producten);
         double totalDistance = 0;
 
         //loop over het aantal punten
@@ -57,10 +57,10 @@ public class TspAlgoritme {
     }
 
     //brute force algoritme - geeft de kortste pad terug
-    public ArrayList<Integer[]> BruteForce(ArrayList<Integer[]> punten) {
-        int aantalPoints = punten.size();
-
-        getAllRecursive(aantalPoints, punten);
+    public ArrayList<Integer[]> BruteForce(ArrayList<Product> producten) {
+        int aantalPoints = producten.size();
+        ArrayList<Integer[]> pointsCopy = productListToIntArray(producten);
+        getAllRecursive(aantalPoints, pointsCopy);
 
         System.out.println(bruteForceShortestPathDistance);
         return bruteForceShortestPath;
@@ -130,5 +130,13 @@ public class TspAlgoritme {
         }
 
         return totalDistance;
+    }
+
+    private ArrayList<Integer[]> productListToIntArray(ArrayList<Product> producten) {
+        ArrayList<Integer[]> productLocaties = new ArrayList<>();
+        for (Product product : producten) {
+            productLocaties.add(product.getLocatie());
+        }
+        return productLocaties;
     }
 }

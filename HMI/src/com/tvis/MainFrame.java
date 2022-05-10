@@ -58,7 +58,7 @@ public class MainFrame extends JFrame implements ActionListener {
             order = new Order(Integer.parseInt(textField1.getText()));
             nextStep("selectOrder");
         }else {
-            pickProcesPanel.executeTspAlgoritme();
+            pickProcesPanel.executeTspAlgoritme(order.getProductList());
             nextStep("pickProcesMonitor");
         }
     }
