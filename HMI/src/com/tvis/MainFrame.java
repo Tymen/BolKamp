@@ -14,6 +14,8 @@ public class MainFrame extends JFrame implements ActionListener {
     private PickProces pickProcesPanel;
     private PickProcesMonitor pickProcesMonitorPanel;
     private PickMonitor pickMonitor;
+
+    private Order order;
     public MainFrame (PickProces pickproces, PickProcesMonitor pickProcesMonitor) {
         setPickProces(pickproces);
         setPickProcesMonitor(pickProcesMonitor);
@@ -53,6 +55,7 @@ public class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object getSource = e.getSource();
         if(getSource == submitButton) {
+            order = new Order(Integer.parseInt(textField1.getText()));
             nextStep("selectOrder");
         }else {
             nextStep("pickProcesMonitor");

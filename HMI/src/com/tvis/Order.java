@@ -3,9 +3,11 @@ package com.tvis;
 import java.util.ArrayList;
 
 public class Order {
+    private int orderId;
     private ArrayList<Product> productList;
 
-    public Order() {
+    public Order(int orderId) {
+        this.orderId = orderId;
         productList = new ArrayList<>();
         productList.add(new Product(2, new Integer[]{1, 2}));
         productList.add(new Product(4, new Integer[]{2, 3}));
