@@ -2,39 +2,66 @@ package com.tvis;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class PickMonitor extends JPanel {
-    public PickMonitor() {
-        setBackground(Color.white);
-        this.setPreferredSize(new Dimension(300, 300));
-    }
 
+    private int canvasWidth;
+    private int canvasHeight;
+    private int sizeBetween;
+    private ArrayList<StorageBox> wareHouse = new ArrayList<>();
+    private Graphics canvas;
+    public PickMonitor() {
+        canvasHeight = 500;
+        canvasWidth = 500;
+        sizeBetween = 10;
+        this.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
+    }
+    // Vooraf X en Y opnieuw bekijken. Want het moet even anders gedaan worden.
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawRect(0,0,750,120);
-        g.setColor(Color.BLUE);
-        g.fillRect(0,0,750,120);
+        this.canvas = g;
+        int verticalY = 0;
+        for (int i = 0; i < 5; i++){
+            int horizontalX = 0;
+            String[] row = new String[]{"A", "B", "C", "D", "E"};
+            for (int x = 0; x < 5; x++) {
+                g.drawRect(horizontalX,verticalY,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
+                g.setColor(Color.BLUE);
+                g.fillRect(horizontalX,verticalY,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
+                wareHouse.add(new StorageBox(row[i] + x, horizontalX, verticalY, 0));
+                horizontalX += (canvasWidth - (sizeBetween * 4)) / 5 + sizeBetween;
+            }
+            verticalY += (canvasHeight - (sizeBetween * 4)) / 5 + sizeBetween;
+        }
 
-        g.drawRect(0,120,750,40);
-        g.setColor(Color.GRAY);
-        g.fillRect(0,120,750,40);
+        for (StorageBox item : wareHouse){
+            System.out.println(item.getId());
+        }
+        updateStatus(1, "B3");
+    }
 
-        g.drawRect(0,160,750,75);
-        g.setColor(Color.YELLOW);
-        g.fillRect(0,160,750,75);
+    public StorageBox getStorageBox(String id) {
+        StorageBox storageBox = null;
+        for (StorageBox item : wareHouse){
+            if (id.equals(item.getId())) {
+                storageBox = item;
+            }
+        }
+        return storageBox;
+    }
 
-        g.setColor(Color.BLACK);
-        g.drawRect(60,30,40,60);
-        g.setColor(Color.BLACK);
-        g.fillRect(60,30,40,60);
+    public void updateStatus(int status, String id) {
+        StorageBox storageBox = getStorageBox(id);
+        storageBox.setStatus(status);
+        updateColor(storageBox.getX(), storageBox.getY(), Color.GREEN);
+    }
 
-        g.drawOval(60, 10, 40, 40);
-        g.setColor(Color.BLACK);
-        g.fillOval(60, 10, 40, 40);
-
-        g.drawOval(60, 65, 40, 40);
-        g.setColor(Color.BLACK);
-        g.fillOval(60, 65, 40, 40);
+    public void updateColor(int x, int y, Color color) {
+        super.paintComponent(canvas);
+        canvas.drawRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
+        canvas.setColor(color);
+        canvas.fillRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
     }
 }
