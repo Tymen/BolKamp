@@ -28,10 +28,11 @@ public class MainFrame extends JFrame implements ActionListener {
     public void setFrameSettings() throws SQLException {
         setTitle("Order Picker Bolkamp");
         setContentPane(mainPanel);
-        setSize(1200,700);
+        setSize(1600,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        
         this.pickMonitor = new PickMonitor();
+        this.pickProcesPanel.getNextButton().addActionListener(this);
         submitButton.addActionListener(this);
 
         setVisible(true);

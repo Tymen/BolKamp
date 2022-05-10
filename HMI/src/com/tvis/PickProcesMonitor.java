@@ -13,6 +13,8 @@ public class PickProcesMonitor extends JFrame{
     private JButton finishButton;
     private JButton stopProcesButton;
     private JButton pauseProcesButton;
+    private JPanel packMonitorPanel;
+    private JPanel orderInfoPanel;
     private PickMonitor pickMonitor;
 
     public PickProcesMonitor() {
