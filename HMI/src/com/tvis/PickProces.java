@@ -5,6 +5,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class PickProces {
     private JLabel pickStatus;
@@ -16,8 +18,9 @@ public class PickProces {
     private JButton cancelButton;
     private JComboBox comboBox1;
     private JComboBox comboBox2;
+    private Order bestel = new Order(1001);
 
-    public PickProces () {
+    public PickProces () throws SQLException {
         createTable();
     }
 
@@ -30,14 +33,21 @@ public class PickProces {
     }
 
     private void createTable() {
+        ArrayList<Product> producten = bestel.getProductList();
         productTable.setEnabled(false);
         Object[][] data = {
                 {3, 1, "RC auto", "B1", 2},
                 {1, 1, "RC raceAuto", "B2", 2}
         };
+
+        Object[][] data2 = {
+            for(Product product : producten) {
+                {}
+            }
+        };
         productTable.setModel(new DefaultTableModel(
                 data,
                 new String[]
-                        {"id", "amount", "description", "locatie", "doos"}        ));
+                        {"id", "amount", "description", "locatie", "doos"} ));
     }
 }

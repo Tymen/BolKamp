@@ -5,21 +5,17 @@ import java.sql.*;
 public class DbConnect{
 
     private String url = "jdbc:mysql://localhost/nerdygadgets";
-    private String username, password;
-    private Connection connection = DriverManager.getConnection(url, username, password);
+    private Connection connection;
 
-    public DbConnect() throws SQLException {
+    public DbConnect(String username, String password) throws SQLException {
+        try {
+            connection = DriverManager.getConnection(url, username, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Connection getConnection() {
         return connection;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

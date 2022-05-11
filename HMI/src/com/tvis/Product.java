@@ -9,9 +9,9 @@ public class Product {
     private int size;
     private Integer[] locatie;
 
-    public Product(int size, Integer[] locatie) {
-        this.orderId = 1;
-        this.beschrijving = "product";
+    public Product(int orderId, String beschrijving, int size, Integer[] locatie) {
+        this.orderId = orderId;
+        this.beschrijving = beschrijving;
         this.size = size;
         this.locatie = locatie;
     }

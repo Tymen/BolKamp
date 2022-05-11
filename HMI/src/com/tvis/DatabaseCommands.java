@@ -1,28 +1,27 @@
 package com.tvis;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DatabaseCommands {
-    DbConnect db = new DbConnect();
-    Connection connect = db.getConnection();
+    Connection connect;
+    Statement q1;
 
     public DatabaseCommands() throws SQLException {
         // gebruikersnaam en wachtwoord instellen, dit kunnen we later evt in de app implementeren
-        db.setPassword("");
-        db.setUsername("root");
-
-        String result = rs.getString(3);
-
-        System.out.println(result);
     }
-    Statement q1;
 
-    {
+    public ResultSet getOrderline(int orderID) {
+        ResultSet rs = null;
         try {
             q1 = connect.createStatement();
-        } catch (SQLException e) {
+            rs = q1.executeQuery("SELECT StockItemID, StockItemName, Size, Location\n" +
+                                     "FROM stockitems\n" +
+                                     "WHERE StockItemID IN (SELECT StockItemID FROM orderlines WHERE orderID = " + orderID + ")");
+            q1.close();
+        } catch(SQLException e) {
             e.printStackTrace();
         }
+        return rs;
     }
-    ResultSet rs = q1.executeQuery("SELECT * FROM internet_orderline");
 }
