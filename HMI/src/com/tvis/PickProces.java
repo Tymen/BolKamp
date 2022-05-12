@@ -18,10 +18,10 @@ public class PickProces {
     private JButton cancelButton;
     private JComboBox comboBox1;
     private JComboBox comboBox2;
-    private Order bestel = new Order(1001);
+    private Order bestel;
 
-    public PickProces () throws SQLException {
-        createTable();
+    public PickProces(int orderId) throws SQLException {
+        createTable(orderId);
     }
 
     public JPanel getPickProces() {
@@ -32,19 +32,22 @@ public class PickProces {
         return nextButton;
     }
 
-    private void createTable() {
+    private void createTable(int orderId) throws SQLException {
+        bestel = new Order(orderId);
         ArrayList<Product> producten = bestel.getProductList();
         productTable.setEnabled(false);
-        Object[][] data = {
-                {3, 1, "RC auto", "B1", 2},
-                {1, 1, "RC raceAuto", "B2", 2}
-        };
 
-        Object[][] data2 = {
-            for(Product product : producten) {
-                {}
+        int length = producten.size();
+        Object[][] data = new Object[length][5];
+
+        int i = 0;
+        while(i < length) {
+            for (Product product : producten) {
+                data[i] = new Object[]{product.getOrderId(), product.getAmount(), product.getBeschrijving(), product.getLocatieVisual(), 2};
+                i++;
             }
-        };
+        }
+
         productTable.setModel(new DefaultTableModel(
                 data,
                 new String[]
