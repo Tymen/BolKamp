@@ -3,6 +3,7 @@ package com.tvis;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class MainFrame extends JFrame implements ActionListener {
     private JTextField textField1;
@@ -15,21 +16,20 @@ public class MainFrame extends JFrame implements ActionListener {
     private PickProcesMonitor pickProcesMonitorPanel;
     private PickMonitor pickMonitor;
 
-    private Order order;
-    public MainFrame (PickProces pickproces, PickProcesMonitor pickProcesMonitor) {
-        setPickProces(pickproces);
+    private int order;
+
+    public MainFrame (PickProcesMonitor pickProcesMonitor) throws SQLException {
         setPickProcesMonitor(pickProcesMonitor);
         setFrameSettings();
     }
 
-    public void setFrameSettings() {
+    public void setFrameSettings() throws SQLException {
         setTitle("Order Picker Bolkamp");
         setContentPane(mainPanel);
         setSize(1200,700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         this.pickMonitor = new PickMonitor();
-        this.pickProcesPanel.getNextButton().addActionListener(this);
         submitButton.addActionListener(this);
 
         setVisible(true);
@@ -51,21 +51,36 @@ public class MainFrame extends JFrame implements ActionListener {
         return pickProcesMonitorPanel.getPickProcesMonitor();
     }
 
+    public int getOrder() {
+        return order;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         Object getSource = e.getSource();
         if(getSource == submitButton) {
-            order = new Order(Integer.parseInt(textField1.getText()));
-            nextStep("selectOrder");
-        }else {
-            nextStep("pickProcesMonitor");
+            order = Integer.parseInt(textField1.getText());
+            try {
+                nextStep("selectOrder");
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }else if(e.getSource() == pickProcesPanel.getNextButton()) {
+            try {
+                nextStep("pickProcesMonitor");
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
-    public void nextStep(String step) {
+    public void nextStep(String step) throws SQLException {
         switch (step){
             case "selectOrder":
-                setContentPane(getPickProces());
+                // wanneer er een order is ingevoerd wordt er een PickProcesPanel opgesteld op basis van het ordernr
+                pickProcesPanel = new PickProces(order);
+                setContentPane(pickProcesPanel.getPickProces());
+                this.pickProcesPanel.getNextButton().addActionListener(this);
                 revalidate();
                 break;
             case "pickProcesMonitor":
