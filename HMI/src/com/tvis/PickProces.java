@@ -33,13 +33,17 @@ public class PickProces {
     }
 
     private void createTable(int orderId) throws SQLException {
+        // bestel wordt een order met juiste orderID
         bestel = new Order(orderId);
+        // arraylist met producten, deze producten worden opgehaald in class "Product"
         ArrayList<Product> producten = bestel.getProductList();
         productTable.setEnabled(false);
 
+        // int aanmaken om de while loop bij te hoden, data array aanmaken om de data te laten zien op het scherm
         int length = producten.size();
         Object[][] data = new Object[length][5];
 
+        //producten worden in de array "data" gezet om deze vervolgens te laten zien in de gui
         int i = 0;
         while(i < length) {
             for (Product product : producten) {

@@ -77,6 +77,7 @@ public class MainFrame extends JFrame implements ActionListener {
     public void nextStep(String step) throws SQLException {
         switch (step){
             case "selectOrder":
+                // wanneer er een order is ingevoerd wordt er een PickProcesPanel opgesteld op basis van het ordernr
                 pickProcesPanel = new PickProces(order);
                 setContentPane(pickProcesPanel.getPickProces());
                 this.pickProcesPanel.getNextButton().addActionListener(this);
