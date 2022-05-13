@@ -65,13 +65,9 @@ public class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object getSource = e.getSource();
         if(getSource == submitButton) {
-<<<<<<< HEAD
             orderID = Integer.parseInt(textField1.getText());
             try {
                 order = new Order(orderID);
-                BPPAlgoritmes.nextFitDecreasing(order, 10);
-                order.unpackProducts();
-                BPPAlgoritmes.firstFitDecreasing(order, 10);
                 nextStep("selectOrder");
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -82,12 +78,6 @@ public class MainFrame extends JFrame implements ActionListener {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-=======
-            order = new Order(Integer.parseInt(textField1.getText()));
-            nextStep("selectOrder");
-        }else {
-            nextStep("pickProcesMonitor");
->>>>>>> d32e35c (deleted unneccesary line)
         }
     }
 

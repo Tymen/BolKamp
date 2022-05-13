@@ -56,7 +56,6 @@ public class BPPAlgoritmes {
         for (Box box : boxes) {
             System.out.println(box);
         }
-        System.out.println(" ");
         return boxes;
     }
 

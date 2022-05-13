@@ -12,7 +12,6 @@ public class Product {
     private String locatieVisual;
     private int amount;
 
-
     private boolean packed;
 
     public Product(int stockitemID, String beschrijving, int size, String locatieVisual, int amount, Integer[] locatie) {
@@ -25,7 +24,6 @@ public class Product {
         setLocatie(locatie);
     }
 
-
     public int getSize() {
         return size;
     }
@@ -34,6 +32,9 @@ public class Product {
         this.size = size;
     }
 
+    public Integer[] getLocatie() {
+        return locatie;
+    }
 
     private void setLocatie(Integer[] locatie) {
         this.locatie = locatie;
@@ -46,10 +47,6 @@ public class Product {
 
     public String getBeschrijving() {
         return beschrijving;
-    }
-
-    public Integer[] getLocatie() {
-        return locatie;
     }
 
     public String getLocatieVisual() {
