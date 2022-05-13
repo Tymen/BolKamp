@@ -56,6 +56,7 @@ public class MainFrame extends JFrame implements ActionListener {
         Object getSource = e.getSource();
         if(getSource == submitButton) {
             order = new Order(Integer.parseInt(textField1.getText()));
+            BPPAlgoritmes.firstFitDecreasing(order,  10);
             nextStep("selectOrder");
         }else {
             nextStep("pickProcesMonitor");

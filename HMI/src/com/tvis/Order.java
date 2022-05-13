@@ -16,4 +16,8 @@ public class Order {
         productList.add(new Product(3, new Integer[]{1, 4}));
         productList.add(new Product(2, new Integer[]{5, 2}));
     }
+
+    public ArrayList<Product> getProductList() {
+        return productList;
+    }
 }
