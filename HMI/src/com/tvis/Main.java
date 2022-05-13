@@ -6,7 +6,6 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         //Frame frame = new Frame();\
-        // Ja dit is commentaar
         PickProcesMonitor pickProcesMonitor = new PickProcesMonitor();
         MainFrame frame = new MainFrame(pickProcesMonitor);
         JSerialcomm comm = new JSerialcomm();

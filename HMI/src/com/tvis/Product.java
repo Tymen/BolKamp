@@ -3,33 +3,49 @@ package com.tvis;
 import java.util.ArrayList;
 
 public class Product {
-    private int orderId;
+
     private String beschrijving;
+    private int StockItemID;
 
     private int size;
     private Integer[] locatie;
     private String locatieVisual;
     private int amount;
 
-    public Product(int orderId, String beschrijving, int size, String locatieVisual, int amount, Integer[] locatie) {
-        this.orderId = orderId;
+
+    private boolean packed;
+
+    public Product(int stockitemID, String beschrijving, int size, String locatieVisual, int amount, Integer[] locatie) {
+        this.StockItemID = stockitemID;
         this.beschrijving = beschrijving;
-        this.size = size;
-        this.locatie = locatie;
+        this.packed = false;
         this.locatieVisual = locatieVisual;
         this.amount = amount;
+        setSize(size);
+        setLocatie(locatie);
     }
 
-    public int getOrderId() {
-        return orderId;
+
+    public int getSize() {
+        return size;
+    }
+
+    private void setSize(int size) {
+        this.size = size;
+    }
+
+
+    private void setLocatie(Integer[] locatie) {
+        this.locatie = locatie;
+        this.locatieVisual = locatieVisual;
+    }
+
+    public int getStockItemID() {
+        return StockItemID;
     }
 
     public String getBeschrijving() {
         return beschrijving;
-    }
-
-    public int getSize() {
-        return size;
     }
 
     public Integer[] getLocatie() {
@@ -42,5 +58,20 @@ public class Product {
 
     public int getAmount() {
         return amount;
+    }
+
+    public boolean isPacked() {
+        return packed;
+    }
+
+    public void setPacked(boolean status) {
+        this.packed = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "StockItemID=" + StockItemID +
+                '}';
     }
 }

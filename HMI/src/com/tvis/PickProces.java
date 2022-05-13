@@ -20,8 +20,8 @@ public class PickProces {
     private JComboBox comboBox2;
     private Order bestel;
 
-    public PickProces(int orderId) throws SQLException {
-        createTable(orderId);
+    public PickProces(Order order) throws SQLException {
+        createTable(order);
     }
 
     public JPanel getPickProces() {
@@ -32,9 +32,9 @@ public class PickProces {
         return nextButton;
     }
 
-    private void createTable(int orderId) throws SQLException {
+    private void createTable(Order order) throws SQLException {
         // bestel wordt een order met juiste orderID
-        bestel = new Order(orderId);
+        bestel = order;
         // arraylist met producten, deze producten worden opgehaald in class "Product"
         ArrayList<Product> producten = bestel.getProductList();
         productTable.setEnabled(false);
@@ -47,7 +47,7 @@ public class PickProces {
         int i = 0;
         while(i < length) {
             for (Product product : producten) {
-                data[i] = new Object[]{product.getOrderId(), product.getAmount(), product.getBeschrijving(), product.getLocatieVisual(), 2};
+                data[i] = new Object[]{product.getStockItemID(), product.getAmount(), product.getBeschrijving(), product.getLocatieVisual(), 2};
                 i++;
             }
         }

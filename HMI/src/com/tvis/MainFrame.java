@@ -16,7 +16,9 @@ public class MainFrame extends JFrame implements ActionListener {
     private PickProcesMonitor pickProcesMonitorPanel;
     private PickMonitor pickMonitor;
 
-    private int order;
+    private Order order;
+
+    private int orderID;
 
     public MainFrame (PickProcesMonitor pickProcesMonitor) throws SQLException {
         setPickProcesMonitor(pickProcesMonitor);
@@ -51,7 +53,11 @@ public class MainFrame extends JFrame implements ActionListener {
         return pickProcesMonitorPanel.getPickProcesMonitor();
     }
 
-    public int getOrder() {
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public Order getOrder() {
         return order;
     }
 
@@ -59,8 +65,12 @@ public class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object getSource = e.getSource();
         if(getSource == submitButton) {
-            order = Integer.parseInt(textField1.getText());
+            orderID = Integer.parseInt(textField1.getText());
             try {
+                order = new Order(orderID);
+                BPPAlgoritmes.nextFitDecreasing(order, 10);
+                order.unpackProducts();
+                BPPAlgoritmes.firstFitDecreasing(order, 10);
                 nextStep("selectOrder");
             } catch (SQLException ex) {
                 ex.printStackTrace();
