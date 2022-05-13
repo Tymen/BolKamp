@@ -39,4 +39,10 @@ public class Order {
     public ArrayList<Product> getProductList() {
         return productList;
     }
+
+    public void unpackProducts() {
+        for(Product product : productList) {
+            product.setPacked(false);
+        }
+    }
 }
