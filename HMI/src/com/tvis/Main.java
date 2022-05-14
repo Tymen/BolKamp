@@ -11,7 +11,7 @@ public class Main {
         PickProcesMonitor pickProcesMonitor = new PickProcesMonitor();
         MainFrame frame = new MainFrame(pickProces, pickProcesMonitor);
 
-        JSerialcomm comm = new JSerialcomm();
+        //JSerialcomm comm = new JSerialcomm();
 
         //test voor tsp algoritmes
         /* ArrayList<Integer[]> punten = new ArrayList<>();

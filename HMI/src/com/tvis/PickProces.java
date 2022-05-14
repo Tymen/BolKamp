@@ -16,7 +16,6 @@ public class PickProces {
     private JComboBox comboBox2;
 
     private TspAlgoritme tspAlgoritme;
-    private ArrayList<Integer[]> dummyProductLocaties = new ArrayList<>();
 
     public PickProces () {
         createTable();
@@ -59,6 +58,8 @@ public class PickProces {
             order.setShortestPath(tspAlgoritme.NearestNeighbour(productList));
         } else if (comboBox1.getSelectedItem().toString().equals("Brute Force")) {
             order.setShortestPath(tspAlgoritme.BruteForce(productList));
+        } else if (comboBox1.getSelectedItem().toString().equals("Ant Colony optimalization")){
+            order.setShortestPath(tspAlgoritme.AntColonyOptimalization(productList));
         } else {
             System.out.println("unknown algorithm");
         }

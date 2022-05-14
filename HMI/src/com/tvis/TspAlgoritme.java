@@ -1,11 +1,13 @@
 package com.tvis;
 
+import com.tvis.AntColonyOptimalization.AntColony;
+
 import java.util.ArrayList;
 
 public class TspAlgoritme {
 
     //string array om de beschikbare tsp algoritmes op te halen.
-    private String[] availableAlgoritmes = new String[]{"Nearest Neighbour", "Brute Force", "Ant Colony optimalization"};
+    private final String[] availableAlgoritmes = new String[]{"Nearest Neighbour", "Brute Force", "Ant Colony optimalization"};
 
     //het kortste pad van het brute force algoritme
     private ArrayList<Integer[]> bruteForceShortestPath;
@@ -68,10 +70,18 @@ public class TspAlgoritme {
 
     //TODO wordt gerealiseerd als er tijd over is.
     //ant colony optimalisatie - voert nearest neighbour uit en optimaliseert dit - optimalisatielengte bepaalt hoe lang het algoritme optimaliseert
-    public ArrayList<Integer[]> AntColonyOptimalization(ArrayList<Integer[]> punten, int optimalisatieLengte) {
+    public ArrayList<Integer[]> AntColonyOptimalization(ArrayList<Product> producten) {
         Integer[] currentPoint = new Integer[]{1,1};
-        int aantalPoints = punten.size();
+        int aantalPoints = producten.size();
         ArrayList<Integer[]> shortestPath = new ArrayList<>(aantalPoints);
+
+        ArrayList<Integer[]> NNResult = NearestNeighbour(producten);
+        AntColony antColony = new AntColony(aantalPoints, NNResult);
+        antColony.startAntOptimization();
+        //System.out.println(antColony.getBestTourOrder());
+        for (Integer[] locatie : antColony.getBestTourOrder()) {
+            System.out.println(locatie[0] + " " + locatie[1]);
+        }
 
         return shortestPath;
     }
