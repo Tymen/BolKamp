@@ -71,8 +71,4 @@ public class Product {
                 "StockItemID=" + StockItemID +
                 '}';
     }
-
-    public Integer[] getLocatie() {
-        return locatie;
-    }
 }
