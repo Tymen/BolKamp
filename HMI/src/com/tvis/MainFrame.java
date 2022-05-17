@@ -21,6 +21,8 @@ public class MainFrame extends JFrame implements ActionListener {
     private int orderID;
 
     public MainFrame (PickProcesMonitor pickProcesMonitor) throws SQLException {
+        order = new Order(orderID);
+        pickProcesPanel = new PickProces(order);
         setPickProcesMonitor(pickProcesMonitor);
         setFrameSettings();
     }
@@ -68,7 +70,6 @@ public class MainFrame extends JFrame implements ActionListener {
         if(getSource == submitButton) {
             orderID = Integer.parseInt(textField1.getText());
             try {
-                order = new Order(orderID);
                 nextStep("selectOrder");
             } catch (SQLException ex) {
                 ex.printStackTrace();
