@@ -2,6 +2,7 @@ package com.tvis;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class PickProcesMonitor extends JFrame{
     private JTable table1;
@@ -17,10 +18,12 @@ public class PickProcesMonitor extends JFrame{
     private JPanel orderInfoPanel;
     private PickMonitor pickMonitor;
 
-    public PickProcesMonitor() {
+    public PickProcesMonitor(ArrayList<Integer[]> producten) {
         this.pickMonitor = new PickMonitor();
         pickMonitorPanel.add(this.pickMonitor);
         pickMonitorPanel.revalidate();
+
+        pickMonitor.setProductenToBePicked(producten);
     }
 
     public JPanel getPickProcesMonitor() {

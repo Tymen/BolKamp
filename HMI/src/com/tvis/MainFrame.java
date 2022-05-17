@@ -30,7 +30,7 @@ public class MainFrame extends JFrame implements ActionListener {
         setContentPane(mainPanel);
         setSize(1600,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
+
         this.pickMonitor = new PickMonitor();
         this.pickProcesPanel.getNextButton().addActionListener(this);
         submitButton.addActionListener(this);
