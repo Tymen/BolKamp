@@ -3,6 +3,8 @@ package com.tvis;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class PickMonitor extends JPanel {
 
@@ -11,57 +13,79 @@ public class PickMonitor extends JPanel {
     private int sizeBetween;
     private ArrayList<StorageBox> wareHouse = new ArrayList<>();
     private Graphics canvas;
+
+    private ArrayList<Integer[]> productenToBePicked = new ArrayList<>();
+
     public PickMonitor() {
         canvasHeight = 500;
         canvasWidth = 500;
         sizeBetween = 10;
         this.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
+
+        int verticalY = 0;
+        for (int i = 1; i <= 5; i++){
+            int horizontalX = 0;
+            for (int x = 1; x <= 5; x++) {
+                Integer[] box = new Integer[] {i, x};
+                wareHouse.add(new StorageBox(box, horizontalX, verticalY, 0));
+                horizontalX += (canvasWidth - (sizeBetween * 4)) / 5 + sizeBetween;
+            }
+            verticalY += (canvasHeight - (sizeBetween * 4)) / 5 + sizeBetween;
+        }
     }
     // Vooraf X en Y opnieuw bekijken. Want het moet even anders gedaan worden.
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.canvas = g;
-        int verticalY = 0;
-        for (int i = 0; i < 5; i++){
-            int horizontalX = 0;
-            String[] row = new String[]{"A", "B", "C", "D", "E"};
-            for (int x = 0; x < 5; x++) {
-                g.drawRect(horizontalX,verticalY,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
-                g.setColor(Color.BLUE);
-                g.fillRect(horizontalX,verticalY,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
-                wareHouse.add(new StorageBox(row[i] + x, horizontalX, verticalY, 0));
-                horizontalX += (canvasWidth - (sizeBetween * 4)) / 5 + sizeBetween;
-            }
-            verticalY += (canvasHeight - (sizeBetween * 4)) / 5 + sizeBetween;
-        }
 
         for (StorageBox item : wareHouse){
-            System.out.println(item.getId());
+            updateStatus(0, item.getId());
         }
-        updateStatus(1, "B3");
+
+        setProductStatus();
     }
 
-    public StorageBox getStorageBox(String id) {
+    public void setProductStatus() {
+        for (Integer[] product : productenToBePicked) {
+            updateStatus(1, product);
+        }
+    }
+
+    public StorageBox getStorageBox(Integer[] id) {
         StorageBox storageBox = null;
         for (StorageBox item : wareHouse){
-            if (id.equals(item.getId())) {
+            if (Arrays.equals(item.getId(), id)) {
                 storageBox = item;
             }
         }
         return storageBox;
     }
 
-    public void updateStatus(int status, String id) {
-        StorageBox storageBox = getStorageBox(id);
+    public void updateStatus(int status, Integer[] product) {
+        StorageBox storageBox = getStorageBox(product);
         storageBox.setStatus(status);
-        updateColor(storageBox.getX(), storageBox.getY(), Color.GREEN);
+
+        Color color = switch (status) {
+            //box needs to be picked
+            case 1 -> Color.orange;
+            //box has been picked
+            case 2 -> Color.green;
+            //box not used
+            default -> Color.gray;
+        };
+
+        updateColor(storageBox.getX(), storageBox.getY(), color);
     }
 
     public void updateColor(int x, int y, Color color) {
-        super.paintComponent(canvas);
-        canvas.drawRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
         canvas.setColor(color);
         canvas.fillRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
+        canvas.setColor(Color.black);
+        canvas.drawRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
+    }
+
+    public void setProductenToBePicked(ArrayList<Integer[]> productenToBePicked) {
+        this.productenToBePicked = productenToBePicked;
     }
 }

@@ -3,10 +3,10 @@ package com.tvis;
 public class StorageBox {
     private int x;
     private int y;
-    private String id;
+    private Integer[] id;
     private int status;
 
-    public StorageBox(String id, int x, int y, int status) {
+    public StorageBox(Integer[] id, int x, int y, int status) {
         setId(id);
         setX(x);
         setY(y);
@@ -21,7 +21,7 @@ public class StorageBox {
         this.y = y;
     }
 
-    public void setId(String id) {
+    public void setId(Integer[] id) {
         this.id = id;
     }
 
@@ -33,7 +33,7 @@ public class StorageBox {
         return status;
     }
 
-    public String getId() {
+    public Integer[] getId() {
         return id;
     }
 
