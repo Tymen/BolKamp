@@ -23,7 +23,7 @@ public class PickMonitor extends JPanel {
         this.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
 
         int verticalY = 0;
-        for (int i = 1; i <= 5; i++){
+        for (int i = 5; i >= 1; i--){
             int horizontalX = 0;
             for (int x = 1; x <= 5; x++) {
                 Integer[] box = new Integer[] {i, x};
