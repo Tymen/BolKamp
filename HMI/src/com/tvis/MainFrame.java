@@ -20,9 +20,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private int orderID;
 
-    public MainFrame (PickProcesMonitor pickProcesMonitor) throws SQLException {
-        order = new Order(orderID);
-        pickProcesPanel = new PickProces(order);
+    public MainFrame (PickProcesMonitor pickProcesMonitor, PickMonitor pickMonitor) throws SQLException {
+        this.pickMonitor = pickMonitor;
         setPickProcesMonitor(pickProcesMonitor);
         setFrameSettings();
     }
@@ -33,8 +32,6 @@ public class MainFrame extends JFrame implements ActionListener {
         setSize(1600,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        this.pickMonitor = new PickMonitor();
-        this.pickProcesPanel.getNextButton().addActionListener(this);
         submitButton.addActionListener(this);
 
         setVisible(true);
@@ -87,12 +84,14 @@ public class MainFrame extends JFrame implements ActionListener {
         switch (step){
             case "selectOrder":
                 // wanneer er een order is ingevoerd wordt er een PickProcesPanel opgesteld op basis van het ordernr
+                order = new Order(orderID);
                 pickProcesPanel = new PickProces(order);
-                setContentPane(pickProcesPanel.getPickProces());
                 this.pickProcesPanel.getNextButton().addActionListener(this);
+                setContentPane(pickProcesPanel.getPickProces());
                 revalidate();
                 break;
             case "pickProcesMonitor":
+                pickMonitor.setProductenToBePicked(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
                 break;

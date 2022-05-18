@@ -18,15 +18,17 @@ public class PickProcesMonitor extends JFrame{
     private JPanel orderInfoPanel;
     private PickMonitor pickMonitor;
 
-    public PickProcesMonitor(ArrayList<Integer[]> producten) {
+    public PickProcesMonitor() {
         this.pickMonitor = new PickMonitor();
         pickMonitorPanel.add(this.pickMonitor);
         pickMonitorPanel.revalidate();
-
-        pickMonitor.setProductenToBePicked(producten);
     }
 
     public JPanel getPickProcesMonitor() {
         return pickProcesMonitor;
+    }
+
+    public PickMonitor getPickMonitor() {
+        return pickMonitor;
     }
 }

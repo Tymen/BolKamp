@@ -69,8 +69,10 @@ public class PickMonitor extends JPanel {
         Color color = switch (status) {
             //box needs to be picked
             case 1 -> Color.orange;
+            //next box to be picked
+            case 2 -> Color.yellow;
             //box has been picked
-            case 2 -> Color.green;
+            case 3 -> Color.green;
             //box not used
             default -> Color.gray;
         };
@@ -85,7 +87,9 @@ public class PickMonitor extends JPanel {
         canvas.drawRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
     }
 
-    public void setProductenToBePicked(ArrayList<Integer[]> productenToBePicked) {
-        this.productenToBePicked = productenToBePicked;
+    public void setProductenToBePicked(Order order) {
+        for (Product product : order.getProductList()) {
+            productenToBePicked.add(product.getLocatie());
+        }
     }
 }
