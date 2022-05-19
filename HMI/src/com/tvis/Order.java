@@ -10,10 +10,13 @@ public class Order {
     private DbConnect connect = new DbConnect("root", "");
     private Random rand = new Random();
     private Random rand2 = new Random();
+    private int orderID;
 
     private ArrayList<Integer[]> shortestPath = new ArrayList<>();
 
     public Order(int orderId) throws SQLException {
+        this.orderID = orderId;
+
         // resultset maken, deze vang later de data op
         ResultSet rs = null;
         // connectie weer terug krijgen v.d. DbConnect class
@@ -56,11 +59,16 @@ public class Order {
         }
     }
 
+
     public void setShortestPath(ArrayList<Integer[]> shortestPath) {
         this.shortestPath = shortestPath;
     }
 
     public ArrayList<Integer[]> getShortestPath() {
         return shortestPath;
+    }
+
+    public int getOrderID() {
+        return orderID;
     }
 }
