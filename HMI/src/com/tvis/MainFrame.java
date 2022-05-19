@@ -68,19 +68,20 @@ public class MainFrame extends JFrame implements ActionListener {
             orderID = Integer.parseInt(textField1.getText());
             try {
                 nextStep("selectOrder");
-            } catch (SQLException ex) {
+            } catch (SQLException | InterruptedException ex) {
                 ex.printStackTrace();
             }
         }else if(e.getSource() == pickProcesPanel.getNextButton()) {
             try {
                 nextStep("pickProcesMonitor");
-            } catch (SQLException ex) {
+            } catch (SQLException | InterruptedException ex) {
                 ex.printStackTrace();
             }
+
         }
     }
 
-    public void nextStep(String step) throws SQLException {
+    public void nextStep(String step) throws SQLException, InterruptedException {
         switch (step){
             case "selectOrder":
                 // wanneer er een order is ingevoerd wordt er een PickProcesPanel opgesteld op basis van het ordernr
@@ -94,6 +95,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 pickMonitor.setProductenToBePicked(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
+                pickMonitor.demoPicker();
                 break;
             default:
                 break;

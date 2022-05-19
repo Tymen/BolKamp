@@ -2,9 +2,8 @@ package com.tvis;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class PickMonitor extends JPanel {
 
@@ -15,6 +14,8 @@ public class PickMonitor extends JPanel {
     private Graphics canvas;
 
     private ArrayList<Integer[]> productenToBePicked = new ArrayList<>();
+
+    private int[] productStatus = new int[]{};
 
     public PickMonitor() {
         canvasHeight = 500;
@@ -44,11 +45,15 @@ public class PickMonitor extends JPanel {
         }
 
         setProductStatus();
+
     }
 
     public void setProductStatus() {
-        for (Integer[] product : productenToBePicked) {
-            updateStatus(1, product);
+        for (int i = 0; i < productenToBePicked.size(); i++) {
+            if (productStatus[i] == 0) {
+                productStatus[i] = 1;
+            }
+            updateStatus(productStatus[i], productenToBePicked.get(i));
         }
     }
 
@@ -76,11 +81,11 @@ public class PickMonitor extends JPanel {
             //box not used
             default -> Color.gray;
         };
-
         updateColor(storageBox.getX(), storageBox.getY(), color);
     }
 
     public void updateColor(int x, int y, Color color) {
+        System.out.println(color + " " + x + " " + y);
         canvas.setColor(color);
         canvas.fillRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
         canvas.setColor(Color.black);
@@ -91,5 +96,33 @@ public class PickMonitor extends JPanel {
         for (Product product : order.getProductList()) {
             productenToBePicked.add(product.getLocatie());
         }
+
+        productStatus = new int[productenToBePicked.size()];
+    }
+
+    public void demoPicker() throws InterruptedException {
+        productStatus[0] = 2;
+        repaint();
+
+        SwingWorker swingWorker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                for (int i = 1; i < productenToBePicked.size(); i++) {
+                    TimeUnit.SECONDS.sleep(2);
+                    productStatus[i] = 2;
+                    productStatus[i - 1] = 3;
+                    repaint();
+                    System.out.println("test");
+                }
+                TimeUnit.SECONDS.sleep(2);
+                productStatus[5] = 3;
+                repaint();
+
+                return null;
+            }
+        };
+
+        swingWorker.execute();
+
     }
 }
