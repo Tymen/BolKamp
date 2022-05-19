@@ -2,15 +2,19 @@
 
 Servo rbt;
 
+int location[2] = { 0 , 0 };
+int oldLocation[2] = { 0 , 0 };
+
 unsigned long startTime;
 unsigned long newTime;
+
+int moveX;
+int moveY;
 
 int E1 = 5;
 int M1 = 4;
 int E2 = 6;
 int M2 = 7;
-int movableAmount = 0;
-int amountMoved = 0;
 
 void setup() {
   // put your setup code here, to run once:
