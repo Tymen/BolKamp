@@ -12,6 +12,8 @@ public class Order {
     private Random rand2 = new Random();
     private int orderID;
 
+    private ArrayList<Box> chosenBoxes;
+
     private ArrayList<Integer[]> shortestPath = new ArrayList<>();
 
     public Order(int orderId) throws SQLException {
@@ -57,6 +59,7 @@ public class Order {
         for(Product product : productList) {
             product.setPacked(false);
         }
+        Box.boxes = 0;
     }
 
 
@@ -70,5 +73,9 @@ public class Order {
 
     public int getOrderID() {
         return orderID;
+    }
+
+    public void setChosenBoxes(ArrayList<Box> chosenBoxes) {
+        this.chosenBoxes = chosenBoxes;
     }
 }
