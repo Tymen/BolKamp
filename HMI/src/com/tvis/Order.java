@@ -26,15 +26,23 @@ public class Order {
             e.printStackTrace();
         }
         // hier wordt een arraylist gevuld met producten
-        // TBD: locatie, is nu nog random
         productList = new ArrayList<>();
         if(rs != null) {
             while (rs.next()) {
-                int loc1 = rand.nextInt((5 - 1) + 1) + 1;
-                int loc2 = rand2.nextInt((5 - 1) + 1) + 1;
-                productList.add(new Product(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getInt(5), new Integer[]{loc1, loc2}));
+                Integer[] locatie = locatieArrayToIntegerArraylist(rs.getInt(4));
+                productList.add(new Product(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(5), locatie));
+                System.out.println(locatie[0] + " " + locatie[1]);
             }
         }
+    }
+
+    public Integer[] locatieArrayToIntegerArraylist(int locatie) {
+        Integer[] newLocaties;
+        int x = ((locatie - 1) / 5) + 1;
+        int y = ((locatie - 1) % 5) + 1;
+        newLocaties = new Integer[]{x, y};
+
+        return newLocaties;
     }
 
     // productlijst returnen

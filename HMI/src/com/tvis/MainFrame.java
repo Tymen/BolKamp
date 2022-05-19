@@ -20,7 +20,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private int orderID;
 
-    public MainFrame (PickProcesMonitor pickProcesMonitor) throws SQLException {
+    public MainFrame (PickProcesMonitor pickProcesMonitor, PickMonitor pickMonitor) throws SQLException {
+        this.pickMonitor = pickMonitor;
+        order = new Order(orderID);
+        pickProcesPanel = new PickProces(order);
         setPickProcesMonitor(pickProcesMonitor);
         setFrameSettings();
     }
@@ -28,10 +31,10 @@ public class MainFrame extends JFrame implements ActionListener {
     public void setFrameSettings() throws SQLException {
         setTitle("Order Picker Bolkamp");
         setContentPane(mainPanel);
-        setSize(1200,700);
+        setSize(1600,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        this.pickMonitor = new PickMonitor();
+        this.pickProcesPanel.getNextButton().addActionListener(this);
         submitButton.addActionListener(this);
 
         setVisible(true);
@@ -67,32 +70,35 @@ public class MainFrame extends JFrame implements ActionListener {
         if(getSource == submitButton) {
             orderID = Integer.parseInt(textField1.getText());
             try {
-                order = new Order(orderID);
                 nextStep("selectOrder");
-            } catch (SQLException ex) {
+            } catch (SQLException | InterruptedException ex) {
                 ex.printStackTrace();
             }
         }else if(e.getSource() == pickProcesPanel.getNextButton()) {
             try {
                 nextStep("pickProcesMonitor");
-            } catch (SQLException ex) {
+            } catch (SQLException | InterruptedException ex) {
                 ex.printStackTrace();
             }
+
         }
     }
 
-    public void nextStep(String step) throws SQLException {
+    public void nextStep(String step) throws SQLException, InterruptedException {
         switch (step){
             case "selectOrder":
                 // wanneer er een order is ingevoerd wordt er een PickProcesPanel opgesteld op basis van het ordernr
+                order = new Order(orderID);
                 pickProcesPanel = new PickProces(order);
-                setContentPane(pickProcesPanel.getPickProces());
                 this.pickProcesPanel.getNextButton().addActionListener(this);
+                setContentPane(pickProcesPanel.getPickProces());
                 revalidate();
                 break;
             case "pickProcesMonitor":
+                pickMonitor.setProductenToBePicked(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
+                pickMonitor.demoPicker();
                 break;
             default:
                 break;

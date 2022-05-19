@@ -14,11 +14,11 @@ public class Product {
 
     private boolean packed;
 
-    public Product(int stockitemID, String beschrijving, int size, String locatieVisual, int amount, Integer[] locatie) {
+    public Product(int stockitemID, String beschrijving, int size, int amount, Integer[] locatie) {
         this.StockItemID = stockitemID;
         this.beschrijving = beschrijving;
         this.packed = false;
-        this.locatieVisual = locatieVisual;
+        this.locatieVisual = tspLocationToVisual(locatie);
         this.amount = amount;
         setSize(size);
         setLocatie(locatie);
@@ -38,7 +38,6 @@ public class Product {
 
     private void setLocatie(Integer[] locatie) {
         this.locatie = locatie;
-        this.locatieVisual = locatieVisual;
     }
 
     public int getStockItemID() {
@@ -63,6 +62,13 @@ public class Product {
 
     public void setPacked(boolean status) {
         this.packed = status;
+    }
+
+    public String tspLocationToVisual(Integer[] locatie) {
+        char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+        String returnValue = "" + alphabet[locatie[0] - 1] + locatie[1];
+
+        return returnValue;
     }
 
     @Override
