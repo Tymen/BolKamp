@@ -20,6 +20,14 @@ public class PickProcesMonitor extends JFrame{
         this.pickMonitor = new PickMonitor();
     }
 
+    public JButton getStopProcesButton() {
+        return stopProcesButton;
+    }
+
+    public JButton getFinishButton() {
+        return finishButton;
+    }
+
     public JPanel getPickProcesMonitor() {
         return pickProcesMonitor;
     }
