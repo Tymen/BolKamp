@@ -35,6 +35,10 @@ public class PickProces {
         return nextButton;
     }
 
+    public JButton getCancelButton() {
+        return cancelButton;
+    }
+
     private void createTable(Order order) throws SQLException {
         // bestel wordt een order met juiste orderID
         bestel = order;
