@@ -1,6 +1,32 @@
+#include <Servo.h>
+
+Servo rbt;
+
+unsigned long startTime;
+unsigned long newTime;
+
+int E1 = 5;
+int M1 = 4;
+int E2 = 6;
+int M2 = 7;
+int movableAmount = 0;
+int amountMoved = 0;
+
 void setup() {
   // put your setup code here, to run once:
 
+  rbt.attach(9);
+  rbt.write(90);
+  
+  pinMode(13, OUTPUT);
+  pinMode(A0, INPUT);
+  pinMode(9, OUTPUT);
+
+  pinMode(M1, OUTPUT);
+  pinMode(M2, OUTPUT);
+  pinMode(E2, OUTPUT);
+  pinMode(E1, OUTPUT);
+  Serial.begin(9600);
 }
 
 void loop() {
