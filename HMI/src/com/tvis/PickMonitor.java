@@ -92,7 +92,7 @@ public class PickMonitor extends JPanel {
         productStatus = new int[productenToBePicked.size()];
     }
 
-    public void demoPicker() throws InterruptedException {
+    public void demoPicker() {
         productStatus[0] = 2;
         repaint();
 
