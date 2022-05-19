@@ -122,6 +122,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 }
                 break;
             case "pickProcesMonitor":
+                pickProcesPanel.executeTspAlgoritme(order);
                 pickMonitor.setProductenToBePicked(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
