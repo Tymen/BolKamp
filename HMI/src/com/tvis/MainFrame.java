@@ -129,6 +129,7 @@ public class MainFrame extends JFrame implements ActionListener {
             case "finish":
                 setContentPane(mainPanel);
                 revalidate();
+                break;
             default:
                 break;
         }
