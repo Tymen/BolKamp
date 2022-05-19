@@ -86,3 +86,24 @@ void goRight(int right) {
     rbt.write(90);
   }
 }
+
+void goPush(int push) {
+  startTime = millis();
+  newTime = millis();
+
+  while (startTime + 1000 > newTime) {
+      digitalWrite(M2, HIGH);
+      analogWrite(E2, 255);
+      newTime = millis();
+  }
+
+  startTime = millis();
+
+  while (startTime + 1000 > newTime) {
+    digitalWrite(M2, LOW);
+    analogWrite(E2, 255);
+    newTime = millis();
+  }
+
+  analogWrite(E2, 0);
+}
