@@ -36,17 +36,15 @@ void loop() {
 }
 
 void goUp(int up) {
-  for(int i = 0; i < up; i++) {
+  for(int i = 0; i < down; i++) {
     startTime = millis();
     newTime = millis();
     while (startTime + 1000 > newTime) {
-      digitalWrite(M2, HIGH);
-      analogWrite(E2, 255);
-      digitalWrite(greenPin, HIGH);
+      digitalWrite(M1, LOW);
+      analogWrite(E1, 50);
       newTime = millis();
     }
-    digitalWrite(greenPin, LOW);
-    analogWrite(E2, 0);
+    analogWrite(E1, 0);
   }
 }
 
@@ -55,13 +53,11 @@ void goDown(int down) {
     startTime = millis();
     newTime = millis();
     while (startTime + 1000 > newTime) {
-      digitalWrite(M2, LOW);
-      analogWrite(E2, 255);
-      digitalWrite(greenPin, HIGH);
+      digitalWrite(M1, HIGH);
+      analogWrite(E1, 50);
       newTime = millis();
     }
-    digitalWrite(greenPin, LOW);
-    analogWrite(E2, 0);
+    analogWrite(E1, 0);
   }
 }
 
