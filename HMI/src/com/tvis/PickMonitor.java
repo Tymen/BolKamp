@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class PickMonitor extends JPanel {
 
@@ -14,9 +17,7 @@ public class PickMonitor extends JPanel {
     private Graphics canvas;
 
     private ArrayList<Integer[]> productenToBePicked = new ArrayList<>();
-
     private int[] productStatus = new int[]{};
-
     public PickMonitor() {
         canvasHeight = 500;
         canvasWidth = 500;
@@ -45,7 +46,6 @@ public class PickMonitor extends JPanel {
         }
 
         setProductStatus();
-
     }
 
     public void setProductStatus() {
@@ -84,14 +84,6 @@ public class PickMonitor extends JPanel {
         updateColor(storageBox.getX(), storageBox.getY(), color);
     }
 
-    public void updateColor(int x, int y, Color color) {
-        System.out.println(color + " " + x + " " + y);
-        canvas.setColor(color);
-        canvas.fillRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
-        canvas.setColor(Color.black);
-        canvas.drawRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
-    }
-
     public void setProductenToBePicked(Order order) {
         for (Product product : order.getProductList()) {
             productenToBePicked.add(product.getLocatie());
@@ -123,6 +115,12 @@ public class PickMonitor extends JPanel {
         };
 
         swingWorker.execute();
+    }
 
+    public void updateColor(int x, int y, Color color) {
+        canvas.setColor(color);
+        canvas.fillRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
+        canvas.setColor(Color.black);
+        canvas.drawRect(x,y,(canvasWidth - (sizeBetween * 4))/5,(canvasHeight - (sizeBetween * 4))/5);
     }
 }

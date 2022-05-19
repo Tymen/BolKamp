@@ -22,6 +22,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
     public MainFrame (PickProcesMonitor pickProcesMonitor, PickMonitor pickMonitor) throws SQLException {
         this.pickMonitor = pickMonitor;
+        order = new Order(orderID);
+        pickProcesPanel = new PickProces(order);
         setPickProcesMonitor(pickProcesMonitor);
         setFrameSettings();
     }
@@ -32,6 +34,7 @@ public class MainFrame extends JFrame implements ActionListener {
         setSize(1600,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        this.pickProcesPanel.getNextButton().addActionListener(this);
         submitButton.addActionListener(this);
 
         setVisible(true);
