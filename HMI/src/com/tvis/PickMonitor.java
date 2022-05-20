@@ -23,10 +23,7 @@ public class PickMonitor extends JPanel {
         canvasWidth = 500;
         sizeBetween = 10;
         this.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
-        setupWarehouse();
 
-    }
-    public void setupWarehouse() {
         int verticalY = 0;
         for (int i = 5; i >= 1; i--){
             int horizontalX = 0;
@@ -88,19 +85,11 @@ public class PickMonitor extends JPanel {
     }
 
     public void setProductenToBePicked(Order order) {
-        productenToBePicked = new ArrayList<>(order.getShortestPath().size()){};
-
-        for (int i = 0; i < order.getShortestPath().size(); i++) {
-            productenToBePicked.add(order.getShortestPath().get(i));
+        for (Product product : order.getProductList()) {
+            productenToBePicked.add(product.getLocatie());
         }
 
         productStatus = new int[productenToBePicked.size()];
-    }
-    public void reset() {
-        this.productStatus = null;
-        productenToBePicked.clear();
-        this.wareHouse.clear();
-        setupWarehouse();
     }
 
     public void demoPicker() {
@@ -110,15 +99,15 @@ public class PickMonitor extends JPanel {
         SwingWorker swingWorker = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                int i;
-                for (i = 1; i < productenToBePicked.size(); i++) {
+                for (int i = 1; i < productenToBePicked.size(); i++) {
                     TimeUnit.SECONDS.sleep(2);
                     productStatus[i] = 2;
                     productStatus[i - 1] = 3;
                     repaint();
+                    //System.out.println("test");
                 }
                 TimeUnit.SECONDS.sleep(2);
-                productStatus[i - 1] = 3;
+                productStatus[5] = 3;
                 repaint();
 
                 return null;

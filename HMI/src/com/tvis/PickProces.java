@@ -48,6 +48,10 @@ public class PickProces implements ItemListener{
         return cancelButton;
     }
 
+    public Order getBestel() {
+        return bestel;
+    }
+
     private void createTable(Order order) throws SQLException {
         // bestel wordt een order met juiste orderID
         bestel = order;
