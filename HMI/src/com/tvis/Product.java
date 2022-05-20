@@ -24,6 +24,20 @@ public class Product {
         setLocatie(locatie);
     }
 
+    public String tspLocationToVisual(Integer[] locatie) {
+        char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+        String returnValue = "" + alphabet[locatie[0] - 1] + locatie[1];
+
+        return returnValue;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "StockItemID=" + StockItemID +
+                '}';
+    }
+
     public int getSize() {
         return size;
     }
@@ -62,19 +76,5 @@ public class Product {
 
     public void setPacked(boolean status) {
         this.packed = status;
-    }
-
-    public String tspLocationToVisual(Integer[] locatie) {
-        char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-        String returnValue = "" + alphabet[locatie[0] - 1] + locatie[1];
-
-        return returnValue;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "StockItemID=" + StockItemID +
-                '}';
     }
 }

@@ -35,7 +35,7 @@ public class MainFrame extends JFrame implements ActionListener {
         setFrameSettings();
     }
 
-    public void setFrameSettings() throws SQLException {
+    public void setFrameSettings() {
         setTitle("Order Picker Bolkamp");
         setContentPane(mainPanel);
         setSize(1600,800);

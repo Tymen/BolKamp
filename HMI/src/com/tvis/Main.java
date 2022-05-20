@@ -7,6 +7,5 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         MainFrame frame = new MainFrame();
-        //JSerialComm ui = new JSerialComm();
     }
 }

@@ -47,6 +47,7 @@ public class StartProcess {
         thrd.start();
     }
 
+    // TODO change to thread
     public void startPickProcess(Order order) throws SQLException {
         final int[] n1 = new int[1];
         SerialPort port = comm.getPort1();
