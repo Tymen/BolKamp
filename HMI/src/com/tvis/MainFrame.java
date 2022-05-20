@@ -17,16 +17,19 @@ public class MainFrame extends JFrame implements ActionListener {
     private PickProces pickProcesPanel;
     private PickProcesMonitor pickProcesMonitorPanel;
     private PickMonitor pickMonitor;
+    private PackMonitor packMonitor;
 
     private Order order;
 
     private int orderID;
 
-    public MainFrame (PickProcesMonitor pickProcesMonitor, PickMonitor pickMonitor) throws SQLException {
-        this.pickMonitor = pickMonitor;
+    public MainFrame () throws SQLException {
         order = new Order(orderID);
+        setPickProcesMonitor(new PickProcesMonitor());
+        this.pickMonitor = this.pickProcesMonitorPanel.getPickMonitor();
+        this.packMonitor = this.pickProcesMonitorPanel.getPackMonitor();
         pickProcesPanel = new PickProces(order);
-        setPickProcesMonitor(pickProcesMonitor);
+
         setFrameSettings();
     }
 
@@ -111,7 +114,9 @@ public class MainFrame extends JFrame implements ActionListener {
                 try {
                     orderID = Integer.parseInt(textField1.getText());
                     textField1.setText("");
+                    pickMonitor.reset();
                     order = new Order(orderID);
+                    order.unpackProducts();
                     pickProcesPanel = new PickProces(order);
                     setContentPane(pickProcesPanel.getPickProces());
                     this.pickProcesPanel.getNextButton().addActionListener(this);
@@ -124,6 +129,9 @@ public class MainFrame extends JFrame implements ActionListener {
             case "pickProcesMonitor":
                 pickProcesPanel.executeTspAlgoritme(order);
                 pickMonitor.setProductenToBePicked(order);
+                pickProcesPanel.executeBppAlgoritme(order);
+                packMonitor.setOrder(order);
+                pickProcesMonitorPanel.setOrder(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
                 pickMonitor.demoPicker();

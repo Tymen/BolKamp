@@ -79,10 +79,12 @@ public class PickProces implements ItemListener{
         int i = 0;
         while(i < length) {
             for (Product product : producten) {
-                data[i] = new Object[]{product.getStockItemID(), product.getAmount(), product.getBeschrijving(), product.getLocatieVisual(), 2};
+                data[i] = new Object[]{product.getStockItemID(), product.getAmount(), product.getBeschrijving(), product.getLocatieVisual(), 0};
                 i++;
             }
         }
+
+        // voor elk product het nummer van de doos updaten
         for(Box doos : nfdBox) {
             for(Product product : doos.getProductsInBox()) {
                 for(int j = 0; j < data.length; j++) {
@@ -96,7 +98,7 @@ public class PickProces implements ItemListener{
         productTable.setModel(new DefaultTableModel(
                 data,
                 new String[]
-                        {"id", "amount", "description", "locatie", "doos"} ));
+                        {"Product ID", "Hoeveelheid", "Beschrijving", "Locatie", "Doosnummer"} ));
     }
 
     private void getTspAlgoritmes() {
@@ -132,6 +134,8 @@ public class PickProces implements ItemListener{
     }
 
     public void executeBppAlgoritme(Order order) {
+
+        // kijkt welk algoritme is gekozen en zet de dozen vast in de order
         if(comboBox2.getSelectedItem().toString().equals("First Fit Decreasing")) {
             order.setChosenBoxes(BPPAlgoritmes.firstFitDecreasing(order, 10));
         } else if(comboBox2.getSelectedItem().toString().equals("Next Fit Decreasing")) {
@@ -141,6 +145,7 @@ public class PickProces implements ItemListener{
         }
     }
 
+    // checkt voor update van de bpp algoritme om live het scherm te updaten
     @Override
     public void itemStateChanged(ItemEvent event) {
         if (event.getStateChange() == ItemEvent.SELECTED) {
@@ -155,6 +160,7 @@ public class PickProces implements ItemListener{
 
                 aantalDozen.setText("Dozen: " + ffdBox.size());
 
+                // doos nummer per product updaten
                 for(Box doos : ffdBox) {
                     for(Product product : doos.getProductsInBox()) {
                         for(int i = 0; i < data.length; i++) {
@@ -167,11 +173,12 @@ public class PickProces implements ItemListener{
                 productTable.setModel(new DefaultTableModel(
                         data,
                         new String[]
-                                {"id", "amount", "description", "locatie", "doos"} ));
+                                {"Product ID", "Hoeveelheid", "Beschrijving", "Locatie", "Doosnummer"} ));
                 break;
             case "Next Fit Decreasing":
                 aantalDozen.setText("Dozen: " + nfdBox.size());
 
+                // doos nummer per product updaten
                 for(Box doos : nfdBox) {
                     for(Product product : doos.getProductsInBox()) {
                         for(int i = 0; i < data.length; i++) {
@@ -184,7 +191,7 @@ public class PickProces implements ItemListener{
                 productTable.setModel(new DefaultTableModel(
                         data,
                         new String[]
-                                {"id", "amount", "description", "locatie", "doos"} ));
+                                {"Product ID", "Hoeveelheid", "Beschrijving", "Locatie", "Doosnummer"} ));
 
                 break;
             default:

@@ -36,7 +36,6 @@ public class Order {
             while (rs.next()) {
                 Integer[] locatie = locatieArrayToIntegerArraylist(rs.getInt(4));
                 productList.add(new Product(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(5), locatie));
-                System.out.println(locatie[0] + " " + locatie[1]);
             }
         }
     }
@@ -77,5 +76,9 @@ public class Order {
 
     public void setChosenBoxes(ArrayList<Box> chosenBoxes) {
         this.chosenBoxes = chosenBoxes;
+    }
+
+    public ArrayList<Box> getChosenBoxes() {
+        return chosenBoxes;
     }
 }

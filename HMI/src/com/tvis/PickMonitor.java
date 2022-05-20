@@ -23,7 +23,10 @@ public class PickMonitor extends JPanel {
         canvasWidth = 500;
         sizeBetween = 10;
         this.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
+        setupWarehouse();
 
+    }
+    public void setupWarehouse() {
         int verticalY = 0;
         for (int i = 5; i >= 1; i--){
             int horizontalX = 0;
@@ -91,6 +94,12 @@ public class PickMonitor extends JPanel {
 
         productStatus = new int[productenToBePicked.size()];
     }
+    public void reset() {
+        this.productStatus = null;
+        productenToBePicked.clear();
+        this.wareHouse.clear();
+        setupWarehouse();
+    }
 
     public void demoPicker() {
         productStatus[0] = 2;
@@ -99,15 +108,15 @@ public class PickMonitor extends JPanel {
         SwingWorker swingWorker = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                for (int i = 1; i < productenToBePicked.size(); i++) {
+                int i;
+                for (i = 1; i < productenToBePicked.size(); i++) {
                     TimeUnit.SECONDS.sleep(2);
                     productStatus[i] = 2;
                     productStatus[i - 1] = 3;
                     repaint();
-                    System.out.println("test");
                 }
                 TimeUnit.SECONDS.sleep(2);
-                productStatus[5] = 3;
+                productStatus[i - 1] = 3;
                 repaint();
 
                 return null;
