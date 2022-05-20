@@ -91,9 +91,7 @@ public class PickMonitor extends JPanel {
         productenToBePicked = new ArrayList<>(order.getShortestPath().size()){};
 
         for (int i = 0; i < order.getShortestPath().size(); i++) {
-            Integer[] test = order.getShortestPath().get(i);
-            System.out.println("test");
-            productenToBePicked.add(test);
+            productenToBePicked.add(order.getShortestPath().get(i));
         }
 
         productStatus = new int[productenToBePicked.size()];

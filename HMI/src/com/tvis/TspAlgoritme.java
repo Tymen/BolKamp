@@ -53,6 +53,7 @@ public class TspAlgoritme {
             totalDistance += shortestDis;
             shortestPath.add(currentPoint);
         }
+        System.out.println(totalDistance);
         return shortestPath;
     }
 
