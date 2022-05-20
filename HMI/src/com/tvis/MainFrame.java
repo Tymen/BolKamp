@@ -19,6 +19,8 @@ public class MainFrame extends JFrame implements ActionListener {
     private PickMonitor pickMonitor;
     private PackMonitor packMonitor;
 
+    private StartProcess tspProces = new StartProcess();
+
     private Order order;
 
     private int orderID;
@@ -135,6 +137,11 @@ public class MainFrame extends JFrame implements ActionListener {
                 setContentPane(getPickProcesMonitor());
                 revalidate();
                 pickMonitor.demoPicker();
+                try {
+                    tspProces.startPickProcess(order);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "firstStep":
                 setContentPane(mainPanel);
