@@ -62,66 +62,62 @@ void loop() {
     oldLocation[1] = location[1];
     location[0] = 0;
     location[1] = 0;
-    goPush();
   }
 }
 
 void goUp(int up) {
-  for(int i = 1; i < up; i++) {
+  for(int i = 0; i < down; i++) {
     startTime = millis();
     newTime = millis();
-    while (startTime + 825 > newTime) {
+    while (startTime + 1000 > newTime) {
       digitalWrite(M1, LOW);
-      analogWrite(E1, 255);
+      analogWrite(E1, 50);
       newTime = millis();
     }
+    analogWrite(E1, 0);
   }
-  analogWrite(E1, LOW);
-  delay(80);
-  analogWrite(E1, 10);
 }
 
 void goDown(int down) {
-  for(int i = 1; i < down; i++) {
+  for(int i = 0; i < down; i++) {
     startTime = millis();
     newTime = millis();
-    while (startTime + 500 > newTime) {
+    while (startTime + 1000 > newTime) {
       digitalWrite(M1, HIGH);
-      analogWrite(E1, 200);
+      analogWrite(E1, 50);
       newTime = millis();
     }
+    analogWrite(E1, 0);
   }
-  digitalWrite(M1, LOW);
-  analogWrite(E1, 255);
-  delay(80);
-  analogWrite(E1, 10);
 }
 
 void goLeft(int left) {
-    for(int i = 1; i < left; i++) {
+    for(int i = 0; i < left; i++) {
      startTime = millis();
      newTime = millis();
-     while (startTime + 1500 > newTime) {
-        rbt.write(45);
+     while (startTime + 1000 > newTime) {
+       digitalWrite(M1, HIGH);
+       analogWrite(E1, 255);
+       digitalWrite(greenPin, HIGH);
        newTime = millis();
      }
   }
-  rbt.write(90);
+  digitalWrite(greenPin, LOW);
+  analogWrite(E1, 0);
 }
 
 void goRight(int right) {
-  for(int i = 1; i < right; i++) {
     startTime = millis();
     newTime = millis();
     while (startTime + 1500 > newTime) {
       rbt.write(135);
       newTime = millis();
     }
+    rbt.write(90);
   }
-  rbt.write(90);
 }
 
-void goPush() {
+void goPush(int push) {
   startTime = millis();
   newTime = millis();
 
