@@ -20,9 +20,9 @@ public class JSerialComm extends JFrame implements ActionListener {
 
     private SerialPort port[] = SerialPort.getCommPorts();
     private SerialPort port1;
-
     private JComboBox<SerialPort> serialBox1 = new JComboBox<>(port);
-    private JComboBox<SerialPort> serialBox2 = new JComboBox<>(port);
+
+    private SerialConnect connection;
 
     private JTextField xAs;
     private JTextField yAs;
@@ -43,7 +43,6 @@ public class JSerialComm extends JFrame implements ActionListener {
         add(serialBox1);
         add(openSerial);
         add(new JSeparator(SwingConstants.VERTICAL));
-        serialBox2.setSelectedIndex(0);
         xAs = new JTextField(10);
         yAs = new JTextField(10);
         submit = new JButton("Submit");
@@ -56,32 +55,24 @@ public class JSerialComm extends JFrame implements ActionListener {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    public SerialPort getPort1() {
-        return port1;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Thread thrd;
         if (e.getSource() == openSerial) {
-            port1 = (SerialPort) serialBox1.getSelectedItem();
-            if (port1.isOpen()) {
-                port1.closePort();
-                openSerial.setText("connect");
-                System.out.println("disconnected from robot 1");
-                serialBox1.setEnabled(true);
-                port1 = null;
-            } else {
-                port1.openPort();
-                port1.setBaudRate(9600);
+            if(connection == null) {
+                connection = new SerialConnect((SerialPort) serialBox1.getSelectedItem());
                 openSerial.setText("disconnect");
-                System.out.println("connected to robot 1");
                 serialBox1.setEnabled(false);
+            } else {
+                connection.disconnectDevice();
+                serialBox1.setEnabled(true);
+                openSerial.setText("connect");
+                connection = null;
             }
         }
 
-        if(port1 != null && port1.isOpen() && e.getSource() == submit) {
-            OutputStream ou = port1.getOutputStream();
+        if(connection != null && e.getSource() == submit) {
+            OutputStream ou = connection.getOutputStream();
             locatie = new Integer[2];
             locatie[0] = Integer.valueOf(xAs.getText());
             locatie[1] = Integer.valueOf(yAs.getText());

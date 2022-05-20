@@ -1,10 +1,13 @@
 package com.tvis;
 
+import com.fazecast.jSerialComm.SerialPort;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.Serial;
 import java.sql.SQLException;
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -13,6 +16,11 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel pickStatus;
     private JLabel packStatus;
     private JPanel mainPanel;
+    private ImageIcon img = new ImageIcon("HMI/src/com/tvis/Bolkamp Icon.png");
+
+    // Serial Connection variables
+    private SerialConnect connection;
+    private JComboBox<SerialPort> serialPorts;
 
     private PickProces pickProcesPanel;
     private PickProcesMonitor pickProcesMonitorPanel;
@@ -40,8 +48,16 @@ public class MainFrame extends JFrame implements ActionListener {
         setContentPane(mainPanel);
         setSize(1600,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setIconImage(img.getImage());
 
         this.pickProcesPanel.getNextButton().addActionListener(this);
+
+        // SerialPort combobox om de devices to selecteren.
+        SerialPort[] ports = new SerialConnect().getPortArray();
+        for(SerialPort port : ports) {
+            serialPorts.addItem(port);
+        }
+
         submitButton.addActionListener(this);
         this.textField1.addKeyListener(new KeyListener(){
             @Override
@@ -118,6 +134,7 @@ public class MainFrame extends JFrame implements ActionListener {
                     textField1.setText("");
                     pickMonitor.reset();
                     order = new Order(orderID);
+                    connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
                     order.unpackProducts();
                     pickProcesPanel = new PickProces(order);
                     setContentPane(pickProcesPanel.getPickProces());
@@ -137,11 +154,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 setContentPane(getPickProcesMonitor());
                 revalidate();
                 pickMonitor.demoPicker();
-                try {
-                    tspProces.startPickProcess(order);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                tspProces.startPickProcess(order, connection.getOutputStream());
                 break;
             case "firstStep":
                 setContentPane(mainPanel);
@@ -150,9 +163,12 @@ public class MainFrame extends JFrame implements ActionListener {
             case "finish":
                 setContentPane(mainPanel);
                 revalidate();
+                // disconnect device aan het einde van het proces.
+                connection.disconnectDevice();
                 break;
             default:
                 break;
         }
     }
+
 }

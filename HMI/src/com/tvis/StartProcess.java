@@ -12,47 +12,17 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class StartProcess {
-    private final boolean[] returnBool = {false};
-    private JSerialComm comm = new JSerialComm();
-    private Thread thrd;
-    public StartProcess() throws SQLException {
+    public StartProcess() {
 
     }
+
     private ArrayList<Integer[]> shortestPath;
 
-    private void checkStatus() {
-        SerialPort port = comm.getPort1();
-        port.setBaudRate(9600);
-        InputStream in = port.getInputStream();
-        port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
-        thrd = new Thread() {
-            @Override
-            public void run() {
-                Scanner s1 = new Scanner(port.getInputStream());
-                while (!returnBool[0]) {
-                    try {
-                        String line = s1.nextLine();
-                        int n1 = Integer.parseInt(line);
-                        if (n1 == 6) {
-                            returnBool[0] = true;
-                            System.out.println("Successfully picked");
-                        }
-                    } catch(Exception e) {
-                        System.out.println("Wrong int");
-                    }
-                }
-                s1.close();
-            }
-        };
-        thrd.start();
-    }
-
     // TODO change to thread
-    public void startPickProcess(Order order) throws SQLException {
-        final int[] n1 = new int[1];
-        SerialPort port = comm.getPort1();
-        OutputStream ou = port.getOutputStream();
+    public void startPickProcess(Order order, OutputStream ou) {
+        // krijg de shortest path van TSP
         shortestPath = order.getShortestPath();
+        // voor elke locatie ga je door een for loop om die te writen op de Arduino
         for(Integer[] location : shortestPath) {
             try {
                 ou.write(location[0]);
