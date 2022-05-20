@@ -8,11 +8,7 @@ public class BPPAlgoritmes {
 
 // two ways to pack boxes as tight as possible
 
-    private final String[] availableAlgoritmes = new String[]{"Next Fit Decreasing", "First Fit Decreasing"};
-
-    public String[] getAvailableAlgoritmes() {
-        return availableAlgoritmes;
-    }
+    public static final String[] availableAlgoritmes = new String[]{"Next Fit Decreasing", "First Fit Decreasing"};
 
     static ArrayList<Box> nextFitDecreasing(Order order, int boxSize) {
 
@@ -52,9 +48,6 @@ public class BPPAlgoritmes {
                     product.setPacked(true);
                 }
             }
-        }
-        for (Box box : boxes) {
-            System.out.println(box);
         }
         return boxes;
     }
@@ -99,9 +92,6 @@ public class BPPAlgoritmes {
                     }
                 }
             }
-        }
-        for (Box box : boxes) {
-            System.out.println(box);
         }
         return boxes;
     }

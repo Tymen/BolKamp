@@ -32,6 +32,10 @@ public class Box {
         return remainingSize;
     }
 
+    public int getBoxNumber() {
+        return boxNumber;
+    }
+
     @Override
     public String toString() {
         return "Box{" +
