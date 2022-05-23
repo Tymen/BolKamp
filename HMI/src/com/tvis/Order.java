@@ -8,8 +8,6 @@ import java.util.Random;
 public class Order {
     private ArrayList<Product> productList;
     private DbConnect connect = new DbConnect("root", "");
-    private Random rand = new Random();
-    private Random rand2 = new Random();
     private int orderID;
 
     private ArrayList<Box> chosenBoxes;
