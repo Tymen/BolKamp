@@ -1,5 +1,7 @@
 #include <Servo.h>
 
+// Begin variables Sietse (niet verplaatsen AUB, gebruik ik in eind verslag
+
 Servo rbt;
 
 int location[2] = { 0 , 0 };
@@ -20,6 +22,8 @@ int E1 = 5;
 int M1 = 4;
 int E2 = 6;
 int M2 = 7;
+
+// Eind variables Sietse
 
 int redPin = 13;
 int greenPin = 12;
@@ -86,13 +90,10 @@ void goUp(int up) {
     startTime = millis();
     newTime = millis();
     while (startTime + 100 > newTime) {
-      digitalWrite(redPin, HIGH);
       digitalWrite(M1, LOW);
       analogWrite(E1, 255);
       newTime = millis();
     }
-    digitalWrite(redPin, LOW);
-    delay(1000);
   }
   analogWrite(E1, LOW);
   delay(80);
@@ -104,13 +105,10 @@ void goDown(int down) {
     startTime = millis();
     newTime = millis();
     while (startTime + 150 > newTime) {
-      digitalWrite(redPin, HIGH);
       digitalWrite(M1, HIGH);
       analogWrite(E1, 200);
       newTime = millis();
     }
-    digitalWrite(redPin, LOW);
-    delay(1000);
   }
   digitalWrite(M1, LOW);
   delay(80);
@@ -122,12 +120,9 @@ void goLeft(int left) {
      startTime = millis();
      newTime = millis();
      while (startTime + 500 > newTime) {
-        digitalWrite(greenPin, HIGH);
         rbt.write(45);
        newTime = millis();
      }
-     digitalWrite(greenPin, LOW);
-     delay(1000);
   }
   rbt.write(90);
 }
@@ -137,12 +132,9 @@ void goRight(int right) {
     startTime = millis();
     newTime = millis();
     while (startTime + 500 > newTime) {
-      digitalWrite(greenPin, HIGH);
       rbt.write(135);
       newTime = millis();
     }
-    digitalWrite(greenPin, LOW);
-    delay(1000);
   }
   rbt.write(90);
 }
@@ -153,7 +145,6 @@ void goPush() {
   analogWrite(E1, pauseMotor);
 
   while (startTime + 750 > newTime) {
-      digitalWrite(M2, HIGH);
       analogWrite(E2, 255);
       digitalWrite(yellowPin, HIGH);
       newTime = millis();
@@ -166,8 +157,6 @@ void goPush() {
     analogWrite(E2, 255);
     newTime = millis();
   }
-
-  digitalWrite(yellowPin, LOW);
   analogWrite(E2, 0);
   writeAmount = 6;
 }
