@@ -10,7 +10,7 @@ int oldLocation[2] = { 1 , 1 };
 boolean isPicked = false;
 int writeAmount = 0;
 
-int pauseMotor = 20;
+int pauseMotor = 50;
 
 unsigned long startTime;
 unsigned long newTime;
@@ -53,8 +53,8 @@ void loop() {
   analogWrite(E1, pauseMotor);
   if(Serial.available() > 0) {
   if(location[0] == 0 && location[1] == 0) {
-    location[0] = Serial.read();
     writeAmount = 0;
+    location[0] = Serial.read();
   } else if(location[1] == 0 && location[0] > 0) {
     location[1] = Serial.read();
   }
@@ -66,22 +66,21 @@ void loop() {
 
     if(moveX < 0) {
       moveX = -moveX;
-      goRight(moveX);
+      goDown(moveX);
     } else {
-      goLeft(moveX);
+      goUp(moveX);
     }
     if(moveY < 0) {
       moveY = -moveY;
-      goDown(moveY);
+      goLeft(moveY);
     } else {
-      goUp(moveY);
+      goRight(moveY);
     }
     oldLocation[0] = location[0];
     oldLocation[1] = location[1];
     location[0] = 0;
     location[1] = 0;
     goPush();
-    isPicked = true;
   }
 }
 
@@ -89,7 +88,7 @@ void goUp(int up) {
   for(int i = 1; i <= up; i++) {
     startTime = millis();
     newTime = millis();
-    while (startTime + 100 > newTime) {
+    while (startTime + 900 > newTime) {
       digitalWrite(M1, LOW);
       analogWrite(E1, 255);
       newTime = millis();
@@ -104,7 +103,7 @@ void goDown(int down) {
   for(int i = 1; i <= down; i++) {
     startTime = millis();
     newTime = millis();
-    while (startTime + 150 > newTime) {
+    while (startTime + 500 > newTime) {
       digitalWrite(M1, HIGH);
       analogWrite(E1, 200);
       newTime = millis();
@@ -119,7 +118,7 @@ void goLeft(int left) {
     for(int i = 1; i <= left; i++) {
      startTime = millis();
      newTime = millis();
-     while (startTime + 500 > newTime) {
+     while (startTime + 1500 > newTime) {
         rbt.write(45);
        newTime = millis();
      }
@@ -131,7 +130,7 @@ void goRight(int right) {
   for(int i = 1; i <= right; i++) {
     startTime = millis();
     newTime = millis();
-    while (startTime + 500 > newTime) {
+    while (startTime + 1500 > newTime) {
       rbt.write(135);
       newTime = millis();
     }
@@ -145,8 +144,8 @@ void goPush() {
   analogWrite(E1, pauseMotor);
 
   while (startTime + 750 > newTime) {
+      digitalWrite(M2, HIGH);
       analogWrite(E2, 255);
-      digitalWrite(yellowPin, HIGH);
       newTime = millis();
   }
 
@@ -158,5 +157,5 @@ void goPush() {
     newTime = millis();
   }
   analogWrite(E2, 0);
-  writeAmount = 6;
+  Serial.println(6);
 }
