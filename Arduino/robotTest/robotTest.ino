@@ -13,7 +13,7 @@ int movableAmount = 0;
 int amountMoved = 0;
 
 void setup() {
-  // put your setup code here, to run once:
+//  TCCR2B = TCCR2B & B11111000 | B00000111;
 
   rbt.attach(9);
   rbt.write(90);
@@ -46,22 +46,23 @@ void loop() {
     amountMoved = 0;
   } else if(movableAmount == 102) {
       digitalWrite(M2, HIGH);
-      analogWrite(E2, 255);
+      analogWrite(E2, 100);
   } else if(movableAmount == 103) {
       digitalWrite(M2, LOW);
-      analogWrite(E2, 255); 
+      analogWrite(E2, 100); 
   } else if(movableAmount == 104) {
       analogWrite(E2, 0);
   } else if(movableAmount == 105) {
     digitalWrite(M1, HIGH);
-    analogWrite(E1, 155);
+    analogWrite(E1, 200);
   } else if(movableAmount == 106) {
     digitalWrite(M1, LOW);
     analogWrite(E1, 255);
   } else if(movableAmount == 107) {
     digitalWrite(M1, LOW);
-    delay(500);
-    digitalWrite(E1, 0);
+    analogWrite(E1, 50);
+    delay(50);
+    analogWrite(E1, 0);
     rbt.write(90);
   } else if(movableAmount == 111) {
     startTime = millis();
