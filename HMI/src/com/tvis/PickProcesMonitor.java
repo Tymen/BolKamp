@@ -1,13 +1,12 @@
 package com.tvis;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PickProcesMonitor extends JFrame{
-    private JTable table1;
+    private JTable productTable;
     private JLabel orderIdLabel;
-    private JTable table2;
     private JProgressBar progressBar1;
     private JPanel pickMonitorPanel;
     private JPanel pickProcesMonitor;
@@ -16,9 +15,17 @@ public class PickProcesMonitor extends JFrame{
     private JButton pauseProcesButton;
     private JPanel packMonitorPanel;
     private JPanel orderInfoPanel;
+    private JLabel date;
+    private JLabel aantalDozen;
     private PickMonitor pickMonitor;
+    private PackMonitor packMonitor;
+
+    private Order order;
 
     public PickProcesMonitor() {
+        this.packMonitor = new PackMonitor();
+        packMonitorPanel.add(packMonitor);
+        packMonitorPanel.revalidate();
         this.pickMonitor = new PickMonitor();
         pickMonitorPanel.add(this.pickMonitor);
         pickMonitorPanel.revalidate();
@@ -38,5 +45,16 @@ public class PickProcesMonitor extends JFrame{
 
     public PickMonitor getPickMonitor() {
         return pickMonitor;
+    }
+
+    public PackMonitor getPackMonitor() {
+        return packMonitor;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+        orderIdLabel.setText("Order ID: " + order.getOrderID());
+        date.setText("Datum: " + new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+        aantalDozen.setText("Dozen: " + order.getChosenBoxes().size());
     }
 }

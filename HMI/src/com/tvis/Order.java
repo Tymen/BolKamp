@@ -8,12 +8,15 @@ import java.util.Random;
 public class Order {
     private ArrayList<Product> productList;
     private DbConnect connect = new DbConnect("root", "");
-    private Random rand = new Random();
-    private Random rand2 = new Random();
+    private int orderID;
+
+    private ArrayList<Box> chosenBoxes;
 
     private ArrayList<Integer[]> shortestPath = new ArrayList<>();
 
     public Order(int orderId) throws SQLException {
+        this.orderID = orderId;
+
         // resultset maken, deze vang later de data op
         ResultSet rs = null;
         // connectie weer terug krijgen v.d. DbConnect class
@@ -31,7 +34,6 @@ public class Order {
             while (rs.next()) {
                 Integer[] locatie = locatieArrayToIntegerArraylist(rs.getInt(4));
                 productList.add(new Product(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(5), locatie));
-                System.out.println(locatie[0] + " " + locatie[1]);
             }
         }
     }
@@ -54,7 +56,9 @@ public class Order {
         for(Product product : productList) {
             product.setPacked(false);
         }
+        Box.boxes = 0;
     }
+
 
     public void setShortestPath(ArrayList<Integer[]> shortestPath) {
         this.shortestPath = shortestPath;
@@ -62,5 +66,17 @@ public class Order {
 
     public ArrayList<Integer[]> getShortestPath() {
         return shortestPath;
+    }
+
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public void setChosenBoxes(ArrayList<Box> chosenBoxes) {
+        this.chosenBoxes = chosenBoxes;
+    }
+
+    public ArrayList<Box> getChosenBoxes() {
+        return chosenBoxes;
     }
 }
