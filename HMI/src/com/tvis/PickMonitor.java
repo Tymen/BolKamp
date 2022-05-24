@@ -57,13 +57,12 @@ public class PickMonitor extends JPanel {
 
     public void setProductStatus() {
         for (int i = 0; i < productenToBePicked.size(); i++) {
-            if (productStatus[i] == 0) {
-                productStatus[i] = 1;
-            }
+            productStatus[i] = 1;
             updateStatus(productStatus[i], productenToBePicked.get(i));
         }
 
         productStatus[0] = 2;
+        updateStatus(productStatus[0], productenToBePicked.get(0));
     }
 
     public void drawPath() {
