@@ -16,7 +16,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel pickStatus;
     private JLabel packStatus;
     private JPanel mainPanel;
-    private ImageIcon img = new ImageIcon("HMI/src/com/tvis/Bolkamp Icon.png");
+    private ImageIcon img = new ImageIcon("src/com/tvis/Bolkamp Icon.png");
 
     // Serial Connection variables
     private SerialConnect connection;

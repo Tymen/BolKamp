@@ -55,21 +55,26 @@ public class StartProcess {
     public void startPickProcess(Order order, SerialPort port, PickMonitor pickMonitor) {
         // krijg de shortest path van TSP
         OutputStream ou = port.getOutputStream();
-        shortestPath = order.getShortestPath();
-        this.pickMonitor = pickMonitor;
-
-        int i = 0;
-        // voor elke locatie ga je door een for loop om die te writen op de Arduino
-        for(Integer[] location : shortestPath) {
-            try {
-                ou.write(location[0]);
-                TimeUnit.SECONDS.sleep(1);
-                ou.write(location[1]);
-                System.out.println(location[0] + " " + location[1]);
-                checkStatus(port);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        shortestPath =order.getShortestPath();
+        this.pickMonitor =pickMonitor;
+        thrd = new Thread() {
+            @Override
+            public void run() {
+                int i = 0;
+                // voor elke locatie ga je door een for loop om die te writen op de Arduino
+                for(Integer[] location :shortestPath) {
+                    try {
+                        ou.write(location[0]);
+                        TimeUnit.SECONDS.sleep(1);
+                        ou.write(location[1]);
+                        System.out.println(location[0] + " " + location[1]);
+                        checkStatus(port);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
-        }
+        };
+        thrd.start();
     }
 }
