@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/kweer/Documents/kbs GitHub/BolKamp/HMI/src</OriginalElement>
+  <nodes>
+    <node x="-594.0984741547356" y="843.53216374269">com.tvis.DbConnect</node>
+    <node x="-2.6319279631438803" y="501.8744343891401">com.tvis.Order</node>
+    <node x="-569.9442091819587" y="683.2545204006185">com.tvis.Frame</node>
+    <node x="849.9102085061304" y="501.8744343891401">com.tvis.TspAlgoritme</node>
+    <node x="-442.39295556899924" y="862.9547623848896">com.tvis.Main</node>
+    <node x="-505.87887342878275" y="808.9547623848896">com.tvis.StartProcess</node>
+    <node x="-455.7783827384553" y="757.4477381192445">com.tvis.AntColonyOptimalization.Ant</node>
+    <node x="-436.7783827384553" y="890.6550043691607">com.tvis.PickMonitor</node>
+    <node x="412.13914027149326" y="501.8744343891401">com.tvis.BPPAlgoritmes</node>
+    <node x="790.9102085061303" y="33.0">com.tvis.PickProcesMonitor</node>
+    <node x="412.13914027149326" y="33.0">com.tvis.PickProces</node>
+    <node x="-475.7783827384553" y="585.0613026819924">com.tvis.PackMonitor</node>
+    <node x="-568.7783827384553" y="502.6550043691607">com.tvis.Product</node>
+    <node x="-455.7783827384553" y="160.05579081804126">com.tvis.SerialConnect</node>
+    <node x="-455.7783827384554" y="690.5683269476374">com.tvis.AntColonyOptimalization.AntColony</node>
+    <node x="-455.7783827384554" y="392.5542784163474">com.tvis.StorageBox</node>
+    <node x="-505.87887342878275" y="678.6550043691607">com.tvis.Box</node>
+    <node x="36.36807203685612" y="33.0">com.tvis.MainFrame</node>
+    <node x="-569.9442091819587" y="768.104641392754">com.tvis.JSerialComm</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic" zoom="0.4252044252044252" showDependencies="false" x="435.0" y="529.0" />
+  <SelectedNodes>
+    <node>com.tvis.TspAlgoritme</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

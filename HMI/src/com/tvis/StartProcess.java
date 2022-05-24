@@ -47,6 +47,7 @@ public class StartProcess {
                         ou.write(location[1]);
                         System.out.println(location[0] + " " + location[1]);
                         checkStatus(port);
+                        pickMonitor.nextBox();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
