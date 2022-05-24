@@ -18,32 +18,13 @@ public class StartProcess {
 
     private boolean checkStatus(SerialPort port) {
         port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
-        InputStream in = port.getInputStream();
-        final int[] n1 = {0};
-////        while(!currentStatus) {
-////            try {
-////                while(s1.hasNext()) {
-////                    String line = s1.next();
-////                    isTrue = Integer.parseInt(line);
-////                }
-////            } catch (Exception e) {
-////                e.printStackTrace();
-////            }
-////
-////            if(isTrue == 6) {
-////                currentStatus = true;
-////            }
-////        }
-
         port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 10, 0);
         port.setBaudRate(9600);
         Scanner s1 = new Scanner(port.getInputStream());
         while (true) {
             String line = s1.next();
-            //n1[0] = Integer.parseInt(line);
             if(line.equals("j") || line.equals("6")) {
                 System.out.println("I should be done now");
-                pickMonitor.nextBox();
                 break;
             }
         }
@@ -51,16 +32,13 @@ public class StartProcess {
         return true;
     }
 
-    // TODO change to thread
     public void startPickProcess(Order order, SerialPort port, PickMonitor pickMonitor) {
         // krijg de shortest path van TSP
         OutputStream ou = port.getOutputStream();
-        shortestPath =order.getShortestPath();
-        this.pickMonitor =pickMonitor;
+        shortestPath = order.getShortestPath();
         thrd = new Thread() {
             @Override
             public void run() {
-                int i = 0;
                 // voor elke locatie ga je door een for loop om die te writen op de Arduino
                 for(Integer[] location :shortestPath) {
                     try {
@@ -76,5 +54,13 @@ public class StartProcess {
             }
         };
         thrd.start();
+    }
+
+    private void finishProcess(OutputStream ou) {
+        try {
+            ou.write(7);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
