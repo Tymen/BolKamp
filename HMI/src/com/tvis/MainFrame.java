@@ -154,7 +154,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 setContentPane(getPickProcesMonitor());
                 revalidate();
                 pickMonitor.demoPicker();
-                tspProces.startPickProcess(order, connection.getOutputStream());
+                tspProces.startPickProcess(order, connection.getPort1());
                 break;
             case "firstStep":
                 setContentPane(mainPanel);
