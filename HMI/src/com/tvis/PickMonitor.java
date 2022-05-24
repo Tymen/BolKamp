@@ -18,6 +18,8 @@ public class PickMonitor extends JPanel {
 
     private ArrayList<Integer[]> productenToBePicked = new ArrayList<>();
     private int[] productStatus = new int[]{};
+
+    private static int currentBox = 0;
     public PickMonitor() {
         canvasHeight = 500;
         canvasWidth = 500;
@@ -49,15 +51,43 @@ public class PickMonitor extends JPanel {
         }
 
         setProductStatus();
+
+        drawPath();
     }
 
     public void setProductStatus() {
         for (int i = 0; i < productenToBePicked.size(); i++) {
-            if (productStatus[i] == 0) {
-                productStatus[i] = 1;
-            }
+            productStatus[i] = 1;
             updateStatus(productStatus[i], productenToBePicked.get(i));
         }
+
+        productStatus[0] = 2;
+        updateStatus(productStatus[0], productenToBePicked.get(0));
+    }
+
+    public void drawPath() {
+        for (int i = 0; i < productenToBePicked.size() - 1; i++) {
+            StorageBox storageBox1 = getStorageBox(productenToBePicked.get(i));
+            StorageBox storageBox2 = getStorageBox(productenToBePicked.get(i + 1));
+
+            canvas.setColor(Color.blue);
+            Graphics2D g2 = (Graphics2D) canvas;
+            g2.setStroke(new BasicStroke(10));
+
+            int x1 = storageBox1.getX() + ((canvasWidth - (sizeBetween * 4)) / 5) / 2;
+            int x2 = storageBox2.getX() + ((canvasWidth - (sizeBetween * 4)) / 5) / 2;
+            int y1 = storageBox1.getY() + ((canvasHeight - (sizeBetween * 4)) / 5) / 2;
+            int y2 = storageBox2.getY() + ((canvasHeight - (sizeBetween * 4)) / 5) / 2;
+
+            canvas.drawLine(x1, y1, x2, y2);
+            canvas.setColor(Color.red);
+            canvas.drawOval(x1 - 5, y1 - 5, 10, 10);
+        }
+
+        StorageBox storageBox = getStorageBox(productenToBePicked.get(productenToBePicked.size() - 1));
+        int x1 = storageBox.getX() + ((canvasWidth - (sizeBetween * 4)) / 5) / 2;
+        int y1 = storageBox.getY() + ((canvasHeight - (sizeBetween * 4)) / 5) / 2;
+        canvas.drawOval(x1 - 5, y1 - 5, 10, 10);
     }
 
     public StorageBox getStorageBox(Integer[] id) {
@@ -126,6 +156,15 @@ public class PickMonitor extends JPanel {
         };
 
         swingWorker.execute();
+    }
+
+    public void nextBox() {
+        productStatus[currentBox] = 3;
+        if (productStatus.length > currentBox + 1) {
+            productStatus[currentBox + 1] = 2;
+        }
+        repaint();
+        currentBox++;
     }
 
     public void updateColor(int x, int y, Color color) {

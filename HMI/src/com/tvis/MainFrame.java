@@ -16,7 +16,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel pickStatus;
     private JLabel packStatus;
     private JPanel mainPanel;
-    private ImageIcon img = new ImageIcon("HMI/src/com/tvis/Bolkamp Icon.png");
+    private ImageIcon img = new ImageIcon("src/com/tvis/Bolkamp Icon.png");
 
     // Serial Connection variables
     private SerialConnect connection;
@@ -153,8 +153,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 pickProcesMonitorPanel.setOrder(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
-                pickMonitor.demoPicker();
-                tspProces.startPickProcess(order, connection.getOutputStream());
+                tspProces.startPickProcess(order, connection.getPort1(), pickMonitor);
                 break;
             case "firstStep":
                 setContentPane(mainPanel);
