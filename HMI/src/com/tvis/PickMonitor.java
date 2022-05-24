@@ -57,12 +57,16 @@ public class PickMonitor extends JPanel {
 
     public void setProductStatus() {
         for (int i = 0; i < productenToBePicked.size(); i++) {
-            productStatus[i] = 1;
+            if (productStatus[i] == 0) {
+                productStatus[i] = 1;
+            }
             updateStatus(productStatus[i], productenToBePicked.get(i));
         }
 
-        productStatus[0] = 2;
-        updateStatus(productStatus[0], productenToBePicked.get(0));
+        if (productStatus[0] == 1) {
+            productStatus[0] = 2;
+            updateStatus(productStatus[0], productenToBePicked.get(0));
+        }
     }
 
     public void drawPath() {
@@ -133,37 +137,23 @@ public class PickMonitor extends JPanel {
         setupWarehouse();
     }
 
-    public void demoPicker() {
-        productStatus[0] = 2;
+    public void nextBox() {
         repaint();
-
         SwingWorker swingWorker = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                int i;
-                for (i = 1; i < productenToBePicked.size(); i++) {
-                    TimeUnit.SECONDS.sleep(2);
-                    productStatus[i] = 2;
-                    productStatus[i - 1] = 3;
-                    repaint();
+                productStatus[currentBox - 1] = 3;
+                if (productStatus.length > currentBox) {
+                    productStatus[currentBox] = 2;
                 }
-                TimeUnit.SECONDS.sleep(2);
-                productStatus[i - 1] = 3;
                 repaint();
-
+                System.out.println(currentBox);
                 return null;
             }
         };
 
         swingWorker.execute();
-    }
 
-    public void nextBox() {
-        productStatus[currentBox] = 3;
-        if (productStatus.length > currentBox + 1) {
-            productStatus[currentBox + 1] = 2;
-        }
-        repaint();
         currentBox++;
     }
 
