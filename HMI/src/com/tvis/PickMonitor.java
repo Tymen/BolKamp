@@ -18,6 +18,8 @@ public class PickMonitor extends JPanel {
 
     private ArrayList<Integer[]> productenToBePicked = new ArrayList<>();
     private int[] productStatus = new int[]{};
+
+    private static int currentBox = 0;
     public PickMonitor() {
         canvasHeight = 500;
         canvasWidth = 500;
@@ -60,6 +62,8 @@ public class PickMonitor extends JPanel {
             }
             updateStatus(productStatus[i], productenToBePicked.get(i));
         }
+
+        productStatus[0] = 2;
     }
 
     public void drawPath() {
@@ -153,6 +157,15 @@ public class PickMonitor extends JPanel {
         };
 
         swingWorker.execute();
+    }
+
+    public void nextBox() {
+        productStatus[currentBox] = 3;
+        if (productStatus.length > currentBox + 1) {
+            productStatus[currentBox + 1] = 2;
+        }
+        repaint();
+        currentBox++;
     }
 
     public void updateColor(int x, int y, Color color) {

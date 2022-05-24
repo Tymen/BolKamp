@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class StartProcess {
     private ArrayList<Integer[]> shortestPath;
     Thread thrd;
+    private PickMonitor pickMonitor;
 
     private boolean checkStatus(SerialPort port) {
         port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
@@ -42,6 +43,7 @@ public class StartProcess {
             //n1[0] = Integer.parseInt(line);
             if(line.equals("j") || line.equals("6")) {
                 System.out.println("I should be done now");
+                pickMonitor.nextBox();
                 break;
             }
         }
@@ -50,10 +52,12 @@ public class StartProcess {
     }
 
     // TODO change to thread
-    public void startPickProcess(Order order, SerialPort port) {
+    public void startPickProcess(Order order, SerialPort port, PickMonitor pickMonitor) {
         // krijg de shortest path van TSP
         OutputStream ou = port.getOutputStream();
         shortestPath = order.getShortestPath();
+        this.pickMonitor = pickMonitor;
+
         int i = 0;
         // voor elke locatie ga je door een for loop om die te writen op de Arduino
         for(Integer[] location : shortestPath) {
