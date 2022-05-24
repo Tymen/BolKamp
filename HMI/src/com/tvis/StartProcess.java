@@ -51,6 +51,7 @@ public class StartProcess {
                         ex.printStackTrace();
                     }
                 }
+                finishProcess(ou);
             }
         };
         thrd.start();
@@ -59,6 +60,7 @@ public class StartProcess {
     private void finishProcess(OutputStream ou) {
         try {
             ou.write(7);
+            System.out.println("Go home");
         } catch (IOException e) {
             e.printStackTrace();
         }
