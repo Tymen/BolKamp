@@ -29,7 +29,6 @@ public class PackMonitor extends JPanel {
         this.canvas = g;
 
         int numberOfBoxes = order.getChosenBoxes().size();
-        int currentBox = 1;
 
         drawBoxes(numberOfBoxes, currentBox);
     }
@@ -37,6 +36,10 @@ public class PackMonitor extends JPanel {
     public void setOrder(Order order) {
         this.order = order;
         repaint();
+    }
+
+    public void setCurrentBox(int currentBox) {
+        this.currentBox = currentBox;
     }
 
     public void drawBoxes(int numberOfBoxes, int currentBox) {
