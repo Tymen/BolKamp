@@ -22,6 +22,7 @@ int E1 = 5;
 int M1 = 4;
 int E2 = 6;
 int M2 = 7;
+boolean nood = false;
 
 // Eind variables Sietse
 
@@ -52,7 +53,7 @@ void loop() {
   Serial.println(writeAmount);
   analogWrite(E1, pauseMotor);
   if(Serial.available() > 0) {
-  if(location[0] == 0 && location[1] == 0) {
+    if(location[0] == 0 && location[1] == 0) {
     writeAmount = 0;
     location[0] = Serial.read();
   } else if(location[1] == 0 && location[0] > 0) {
@@ -60,28 +61,51 @@ void loop() {
   }
   }
 
-  if(location[1] > 0 && location[0] > 0) {
-    moveX = location[0] - oldLocation[0];
-    moveY = location[1] - oldLocation[1];
-
-    if(moveX < 0) {
-      moveX = -moveX;
-      goDown(moveX);
-    } else {
-      goUp(moveX);
-    }
-    if(moveY < 0) {
-      moveY = -moveY;
-      goLeft(moveY);
-    } else {
-      goRight(moveY);
-    }
-    oldLocation[0] = location[0];
-    oldLocation[1] = location[1];
-    location[0] = 0;
-    location[1] = 0;
-    goPush();
+  if(location[0] == 999) {
+      noodStop();
+      location[0] = 0;
+      nood = true;
+  } else if(location[0] == 555) {
+      hardReset();
+      nood = false;
   }
+
+
+  if(!nood){
+      if(location[1] > 0 && location[0] > 0) {
+        moveX = location[0] - oldLocation[0];
+        moveY = location[1] - oldLocation[1];
+
+        if(moveX < 0) {
+          moveX = -moveX;
+          goDown(moveX);
+        } else {
+          goUp(moveX);
+        }
+        if(moveY < 0) {
+          moveY = -moveY;
+          goLeft(moveY);
+        } else {
+          goRight(moveY);
+        }
+        oldLocation[0] = location[0];
+        oldLocation[1] = location[1];
+        location[0] = 0;
+        location[1] = 0;
+        goPush();
+      }
+  }
+}
+
+void noodStop() {
+  analogWrite(E1, 0);
+  analogWrite(E2, 0);
+  rbt.write(90);
+  Serial.println(202);
+}
+
+void hardReset() {
+
 }
 
 void goUp(int up) {

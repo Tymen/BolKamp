@@ -3,10 +3,7 @@ package com.tvis;
 import com.fazecast.jSerialComm.SerialPort;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serial;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +23,8 @@ public class StartProcess {
             if(line.equals("j") || line.equals("6")) {
                 System.out.println("I should be done now");
                 break;
+            } else if(line.equals("202")) {
+                System.out.println("Proces is gestopt!");
             }
         }
         s1.close();
@@ -56,6 +55,15 @@ public class StartProcess {
             }
         };
         thrd.start();
+    }
+
+    public void noodStop(SerialPort port) {
+        OutputStream ou = port.getOutputStream();
+        try {
+            System.out.println("gestopt");
+            ou.write(999);
+
+        } catch (IOException ignored) {}
     }
 
     private void finishProcess(OutputStream ou) {
