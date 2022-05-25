@@ -59,8 +59,6 @@ public class PickProces implements ItemListener{
         ffdBox = BPPAlgoritmes.firstFitDecreasing(bestel, 10);
         bestel.unpackProducts();
 
-        // aantal dozen zetten
-        aantalDozen.setText("Dozen: " + nfdBox.size());
 
         // arraylist met producten, deze producten worden opgehaald in class "Product"
         ArrayList<Product> producten = bestel.getProductList();
@@ -83,22 +81,7 @@ public class PickProces implements ItemListener{
                 i++;
             }
         }
-
-        // voor elk product het nummer van de doos updaten
-        for(Box doos : nfdBox) {
-            for(Product product : doos.getProductsInBox()) {
-                for(int j = 0; j < data.length; j++) {
-                    if(data[j][0].equals(product.getStockItemID())) {
-                        data[j][4] = doos.getBoxNumber();
-                    }
-                }
-            }
-        }
-
-        productTable.setModel(new DefaultTableModel(
-                data,
-                new String[]
-                        {"Product ID", "Hoeveelheid", "Beschrijving", "Locatie", "Doosnummer"} ));
+        updateScreenAlgoritme(nfdBox);
     }
 
     private void getTspAlgoritmes() {
@@ -127,6 +110,7 @@ public class PickProces implements ItemListener{
     private void getBppAlgoritmes() {
         String[] algoritmes = BPPAlgoritmes.availableAlgoritmes;
 
+        // elk algoritme toevoegen in combobox
         for (String algoritme: algoritmes) {
             comboBox2.addItem(algoritme);
         }
@@ -150,52 +134,34 @@ public class PickProces implements ItemListener{
     public void itemStateChanged(ItemEvent event) {
         if (event.getStateChange() == ItemEvent.SELECTED) {
             Object item = event.getItem();
-            updateScreenAlgoritme((String) item);
+            switch ((String) item) {
+                case "First Fit Decreasing" -> updateScreenAlgoritme(ffdBox);
+                case "Next Fit Decreasing" -> updateScreenAlgoritme(nfdBox);
+                default -> {
+                }
+            }
         }
     }
 
-    private void updateScreenAlgoritme(String algoritme) {
-        switch (algoritme) {
-            case "First Fit Decreasing":
+    private void updateScreenAlgoritme(ArrayList<Box> boxes) {
 
-                aantalDozen.setText("Dozen: " + ffdBox.size());
+        // aantal dozen updaten
+        aantalDozen.setText("Dozen: " + boxes.size());
 
-                // doos nummer per product updaten
-                for(Box doos : ffdBox) {
-                    for(Product product : doos.getProductsInBox()) {
-                        for(int i = 0; i < data.length; i++) {
-                            if(data[i][0].equals(product.getStockItemID())) {
-                                data[i][4] = doos.getBoxNumber();
-                            }
-                        }
+        // doos nummer per product updaten
+        for(Box doos : boxes) {
+            for(Product product : doos.getProductsInBox()) {
+                for(int i = 0; i < data.length; i++) {
+                    if(data[i][0].equals(product.getStockItemID())) {
+                        data[i][4] = doos.getBoxNumber();
                     }
                 }
-                productTable.setModel(new DefaultTableModel(
-                        data,
-                        new String[]
-                                {"Product ID", "Hoeveelheid", "Beschrijving", "Locatie", "Doosnummer"} ));
-                break;
-            case "Next Fit Decreasing":
-                aantalDozen.setText("Dozen: " + nfdBox.size());
-
-                // doos nummer per product updaten
-                for(Box doos : nfdBox) {
-                    for(Product product : doos.getProductsInBox()) {
-                        for(int i = 0; i < data.length; i++) {
-                            if(data[i][0].equals(product.getStockItemID())) {
-                                data[i][4] = doos.getBoxNumber();
-                            }
-                        }
-                    }
-                }
-                productTable.setModel(new DefaultTableModel(
-                        data,
-                        new String[]
-                                {"Product ID", "Hoeveelheid", "Beschrijving", "Locatie", "Doosnummer"} ));
-
-                break;
-            default:
-                break;
+            }
         }
+        // tabel invullen
+        productTable.setModel(new DefaultTableModel(
+                data,
+                new String[]
+                        {"Product ID", "Hoeveelheid", "Beschrijving", "Locatie", "Doosnummer"} ));
     }
 }

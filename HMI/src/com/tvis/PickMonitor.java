@@ -2,11 +2,9 @@ package com.tvis;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class PickMonitor extends JPanel {
 
@@ -18,13 +16,18 @@ public class PickMonitor extends JPanel {
 
     private ArrayList<Integer[]> productenToBePicked = new ArrayList<>();
     private int[] productStatus = new int[]{};
-    public PickMonitor() {
+
+    private PackMonitor packMonitor;
+
+    private Order order;
+
+    public PickMonitor(PackMonitor packMonitor) {
         canvasHeight = 500;
         canvasWidth = 500;
         sizeBetween = 10;
         this.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
         setupWarehouse();
-
+        this.packMonitor = packMonitor;
     }
     public void setupWarehouse() {
         int verticalY = 0;
@@ -58,6 +61,10 @@ public class PickMonitor extends JPanel {
             }
             updateStatus(productStatus[i], productenToBePicked.get(i));
         }
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public StorageBox getStorageBox(Integer[] id) {
@@ -103,6 +110,7 @@ public class PickMonitor extends JPanel {
 
     public void demoPicker() {
         productStatus[0] = 2;
+
         repaint();
 
         SwingWorker swingWorker = new SwingWorker() {
@@ -114,10 +122,27 @@ public class PickMonitor extends JPanel {
                     productStatus[i] = 2;
                     productStatus[i - 1] = 3;
                     repaint();
+                    for(Box box : order.getChosenBoxes()) {
+                        for (Product product : box.getProductsInBox()) {
+                            if (product.getLocatie() == productenToBePicked.get(i - 1)) {
+                                box.addPacked(product);
+                                packMonitor.repaint();
+                            }
+                        }
+                    }
                 }
                 TimeUnit.SECONDS.sleep(2);
                 productStatus[i - 1] = 3;
                 repaint();
+
+                for(Box box : order.getChosenBoxes()) {
+                    for (Product product : box.getProductsInBox()) {
+                        if (product.getLocatie() == productenToBePicked.get(i - 1)) {
+                            box.addPacked(product);
+                        }
+                    }
+                }
+                packMonitor.repaint();
 
                 return null;
             }
