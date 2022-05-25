@@ -138,7 +138,9 @@ public class MainFrame extends JFrame implements ActionListener {
                 try {
                     orderID = Integer.parseInt(textField1.getText());
                     order = new Order(orderID);
+
                     connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
+
                     order.unpackProducts();
 
                     textField1.setText("");
@@ -173,7 +175,6 @@ public class MainFrame extends JFrame implements ActionListener {
                 break;
         }
     }
-
 
     public void setInfo(Order order) {
         pickProcesPanel.executeTspAlgoritme(order);

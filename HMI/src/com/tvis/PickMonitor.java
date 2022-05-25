@@ -145,6 +145,7 @@ public class PickMonitor extends JPanel {
     }
 
 
+
     public void nextBox() {
         repaint();
         SwingWorker swingWorker = new SwingWorker() {
