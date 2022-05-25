@@ -2,11 +2,9 @@ package com.tvis;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class PickMonitor extends JPanel {
 
@@ -19,14 +17,19 @@ public class PickMonitor extends JPanel {
     private ArrayList<Integer[]> productenToBePicked = new ArrayList<>();
     private int[] productStatus = new int[]{};
 
+    private PackMonitor packMonitor;
+
+    private Order order;
+
     private static int currentBox = 0;
-    public PickMonitor() {
+
+    public PickMonitor(PackMonitor packMonitor) {
         canvasHeight = 500;
         canvasWidth = 500;
         sizeBetween = 10;
         this.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
         setupWarehouse();
-
+        this.packMonitor = packMonitor;
     }
     public void setupWarehouse() {
         int verticalY = 0;
@@ -94,6 +97,10 @@ public class PickMonitor extends JPanel {
         canvas.drawOval(x1 - 5, y1 - 5, 10, 10);
     }
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     public StorageBox getStorageBox(Integer[] id) {
         StorageBox storageBox = null;
         for (StorageBox item : wareHouse){
@@ -136,6 +143,7 @@ public class PickMonitor extends JPanel {
         this.wareHouse.clear();
         setupWarehouse();
     }
+
 
     public void nextBox() {
         repaint();

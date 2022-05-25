@@ -137,11 +137,13 @@ public class MainFrame extends JFrame implements ActionListener {
                 // wanneer er een order is ingevoerd wordt er een PickProcesPanel opgesteld op basis van het ordernr
                 try {
                     orderID = Integer.parseInt(textField1.getText());
-                    textField1.setText("");
-                    pickMonitor.reset();
                     order = new Order(orderID);
                     connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
                     order.unpackProducts();
+
+                    textField1.setText("");
+                    pickMonitor.reset();
+
                     pickProcesPanel = new PickProces(order);
                     setContentPane(pickProcesPanel.getPickProces());
                     this.pickProcesPanel.getNextButton().addActionListener(this);
@@ -152,11 +154,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 }
                 break;
             case "pickProcesMonitor":
-                pickProcesPanel.executeTspAlgoritme(order);
-                pickMonitor.setProductenToBePicked(order);
-                pickProcesPanel.executeBppAlgoritme(order);
-                packMonitor.setOrder(order);
-                pickProcesMonitorPanel.setOrder(order);
+                setInfo(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
                 tspProces.startPickProcess(order, connection.getPort1(), pickMonitor);
@@ -176,4 +174,12 @@ public class MainFrame extends JFrame implements ActionListener {
         }
     }
 
+
+    public void setInfo(Order order) {
+        pickProcesPanel.executeTspAlgoritme(order);
+        pickMonitor.setProductenToBePicked(order);
+        pickProcesPanel.executeBppAlgoritme(order);
+        packMonitor.setOrder(order);
+        pickProcesMonitorPanel.setOrder(order);
+    }
 }

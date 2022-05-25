@@ -75,10 +75,9 @@ public class BPPAlgoritmes {
                 if(product.getSize() == size && !product.isPacked()) {
 
                     // Find the first bin that can accommodate
-                    int j;
-                    for (j = 0; j < boxes.size(); j++) {
-                        if (boxes.get(j).getRemainingSize() >= size) {
-                            boxes.get(j).addProduct(product);
+                    for (Box box : boxes) {
+                        if (box.getRemainingSize() >= size) {
+                            box.addProduct(product);
                             product.setPacked(true);
                             break;
                         }
