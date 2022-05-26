@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.Serial;
 import java.sql.SQLException;
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -33,12 +32,17 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private int orderID;
 
+    public StartProcess getTspProces() {
+        return tspProces;
+    }
+
     public MainFrame () throws SQLException {
         order = new Order(orderID);
         setPickProcesMonitor(new PickProcesMonitor());
         this.pickMonitor = this.pickProcesMonitorPanel.getPickMonitor();
         this.packMonitor = this.pickProcesMonitorPanel.getPackMonitor();
         pickProcesPanel = new PickProces(order);
+        this.pickProcesMonitorPanel.getStopProcesButton().addActionListener(this);
 
         setFrameSettings();
     }
@@ -122,6 +126,8 @@ public class MainFrame extends JFrame implements ActionListener {
             nextStep("firstStep");
         } else if (e.getSource() == this.pickProcesMonitorPanel.getFinishButton()) {
             nextStep("finish");
+        } else if (e.getSource() == this.pickProcesMonitorPanel.getStopProcesButton()) {
+            tspProces.noodStop(connection.getPort1());
         }
     }
 

@@ -57,4 +57,5 @@ public class PickProcesMonitor extends JFrame{
         date.setText("Datum: " + new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         aantalDozen.setText("Dozen: " + order.getChosenBoxes().size());
     }
+
 }
