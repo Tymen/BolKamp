@@ -3,6 +3,7 @@ package com.tvis;
 import com.fazecast.jSerialComm.SerialPort;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.sql.SQLException;
 
 public class MainFrame extends JFrame implements ActionListener {
+    private final boolean devMode;
     private JTextField textField1;
     private JButton submitButton;
     private JLabel pickStatus;
@@ -20,6 +22,7 @@ public class MainFrame extends JFrame implements ActionListener {
     // Serial Connection variables
     private SerialConnect connection;
     private JComboBox<SerialPort> serialPorts;
+    private JLabel checkOrderMessage;
 
     private PickProces pickProcesPanel;
     private PickProcesMonitor pickProcesMonitorPanel;
@@ -36,13 +39,21 @@ public class MainFrame extends JFrame implements ActionListener {
         return tspProces;
     }
 
-    public MainFrame () throws SQLException {
-        order = new Order(orderID);
-        setPickProcesMonitor(new PickProcesMonitor());
-        this.pickMonitor = this.pickProcesMonitorPanel.getPickMonitor();
-        this.packMonitor = this.pickProcesMonitorPanel.getPackMonitor();
-        pickProcesPanel = new PickProces(order);
-        this.pickProcesMonitorPanel.getStopProcesButton().addActionListener(this);
+    public MainFrame (boolean devMode) throws SQLException {
+        this.devMode = devMode;
+
+        try {
+            order = new Order(orderID, devMode);
+
+            setPickProcesMonitor(new PickProcesMonitor());
+            this.pickMonitor = this.pickProcesMonitorPanel.getPickMonitor();
+            this.packMonitor = this.pickProcesMonitorPanel.getPackMonitor();
+            pickProcesPanel = new PickProces(order);
+            this.pickProcesMonitorPanel.getStopProcesButton().addActionListener(this);
+            checkOrderMessage.setText("");
+        } catch (Exception e) {
+            checkOrderMessage.setText("order has already been picked");
+        }
 
         setFrameSettings();
     }
@@ -135,21 +146,30 @@ public class MainFrame extends JFrame implements ActionListener {
         switch (step){
             case "selectOrder":
                 // wanneer er een order is ingevoerd wordt er een PickProcesPanel opgesteld op basis van het ordernr
-                try {
                     orderID = Integer.parseInt(textField1.getText());
                     textField1.setText("");
                     pickMonitor.reset();
-                    order = new Order(orderID);
-                    connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
-                    order.unpackProducts();
-                    pickProcesPanel = new PickProces(order);
-                    setContentPane(pickProcesPanel.getPickProces());
-                    this.pickProcesPanel.getNextButton().addActionListener(this);
-                    this.pickProcesPanel.getCancelButton().addActionListener(this);
-                    revalidate();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+
+                    try {
+                        order = new Order(orderID, devMode);
+                        //connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
+
+                        try {
+                            order.unpackProducts();
+                            pickProcesPanel = new PickProces(order);
+                            setContentPane(pickProcesPanel.getPickProces());
+                            this.pickProcesPanel.getNextButton().addActionListener(this);
+                            this.pickProcesPanel.getCancelButton().addActionListener(this);
+                            revalidate();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                        checkOrderMessage.setText("");
+                    } catch (Exception e) {
+                        checkOrderMessage.setText("order has already been picked");
+                    }
+
+
                 break;
             case "pickProcesMonitor":
                 pickProcesPanel.executeTspAlgoritme(order);
@@ -166,6 +186,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 revalidate();
                 break;
             case "finish":
+                order.setPicked();
                 setContentPane(mainPanel);
                 revalidate();
                 // disconnect device aan het einde van het proces.
