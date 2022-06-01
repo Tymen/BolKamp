@@ -89,7 +89,11 @@ void loop() {
       goDownRight(moveX, moveY);
     } else if(moveX > 0 && moveY < 0){
       moveY = -moveY;
-      goUpLeft(moveX, moveY);
+      if(moveY * 1500 > moveX * 900) {
+        goLeftUp(moveX, moveY);
+      } else {
+        goUpLeft(moveX, moveY);
+      }
     } else {
       goUpRight(moveX, moveY);
     }
@@ -108,7 +112,9 @@ void loop() {
 }
 
 void goUpRight(int up, int right) {
-  int delayLR = 1500 / up;
+  unsigned long startTime2;
+  unsigned long newTime2;
+  int delayLR = 1500 / right;
   for(int i = 1; i <= up; i++) {
     startTime = millis();
     newTime = millis();
@@ -117,11 +123,11 @@ void goUpRight(int up, int right) {
       analogWrite(E1, 255);
       newTime = millis();
       for(int i = 1; i <= right; i++) {
-        startTime = millis();
-        newTime = millis();
-        while (startTime + delayLR > newTime) {
+        startTime2 = millis();
+        newTime2 = millis();
+        while (startTime2 + delayLR > newTime2) {
           rbt.write(135);
-          newTime = millis();
+          newTime2 = millis();
         }
       }
     }
@@ -132,23 +138,49 @@ void goUpRight(int up, int right) {
   rbt.write(90);
 }
 
-void goUpLeft(int up, int left) {
-  int delayLR = 1500 / up;
-  for(int i = 1; i <= up; i++) {
-    startTime = millis();
-    newTime = millis();
-    while (startTime + 900 > newTime) {
+void goLeftUp(int up, int right) {
+  int delayUD = 900 / up;
+  
+  startTime = millis();
+  newTime = millis();
+  while(startTime + (1500 * right) > newTime) {
+    rbt.write(45);
+    
+    while(startTime + (900 * up) > newTime) {
       digitalWrite(M1, LOW);
       analogWrite(E1, 255);
       newTime = millis();
-      for(int i = 1; i <= left; i++) {
-        startTime = millis();
-        newTime = millis();
-        while (startTime + delayLR > newTime) {
+    }
+    analogWrite(E1, pauseMotor);
+    newTime = millis();
+  }
+  analogWrite(E1, LOW);
+  delay(80);
+  analogWrite(E1, pauseMotor);
+  rbt.write(90);
+}
+
+void goUpLeft(int up, int left) {
+  unsigned long startTime2;
+  unsigned long newTime2;
+  int delayLR = 1500 / left;
+  startTime = millis();
+  newTime = millis();
+    
+  for(int i = 1; i <= up; i++) {
+    while (startTime + 900 > newTime) {
+      digitalWrite(M1, LOW);
+      analogWrite(E1, 255);
+      for(int j = 1; j <= left; j++) {
+        startTime2 = millis();
+        newTime2 = millis();
+        while (startTime2 + delayLR > newTime2) {
           rbt.write(45);
           newTime = millis();
         }
       }
+
+      newTime = millis();
     }
   }
   analogWrite(E1, LOW);
@@ -162,7 +194,7 @@ void goDownLeft(int down, int left) {
   for(int i = 1; i <= down; i++) {
     startTime = millis();
     newTime = millis();
-    while (startTime + 900 > newTime) {
+    while (startTime + 900 - delayLR > newTime) {
       digitalWrite(M1, HIGH);
       analogWrite(E1, 255);
       newTime = millis();
@@ -187,7 +219,7 @@ void goDownRight(int down, int right) {
   for(int i = 1; i <= down; i++) {
     startTime = millis();
     newTime = millis();
-    while (startTime + 900 > newTime) {
+    while (startTime + 900 - delayLR > newTime) {
       digitalWrite(M1, HIGH);
       analogWrite(E1, 255);
       newTime = millis();

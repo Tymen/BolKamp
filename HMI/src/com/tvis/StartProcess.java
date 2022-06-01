@@ -41,7 +41,7 @@ public class StartProcess {
             String line = s1.next();
             //n1[0] = Integer.parseInt(line);
             if(line.equals("j") || line.equals("6")) {
-                System.out.println("I should be done now");
+                System.out.println("Product picked");
                 break;
             }
         }
@@ -66,6 +66,13 @@ public class StartProcess {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        }
+
+        try {
+            ou.write(7);
+            System.out.println("process finished");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

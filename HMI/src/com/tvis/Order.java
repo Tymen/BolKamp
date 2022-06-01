@@ -44,6 +44,10 @@ public class Order {
         int y = ((locatie - 1) % 5) + 1;
         newLocaties = new Integer[]{x, y};
 
+        for(Integer i : newLocaties) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
         return newLocaties;
     }
 
