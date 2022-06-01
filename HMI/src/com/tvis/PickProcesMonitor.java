@@ -12,7 +12,7 @@ public class PickProcesMonitor extends JFrame{
     private JPanel pickProcesMonitor;
     private JButton finishButton;
     private JButton stopProcesButton;
-    private JButton pauseProcesButton;
+    private JButton resetProcesButton;
     private JPanel packMonitorPanel;
     private JPanel orderInfoPanel;
     private JLabel date;
@@ -33,6 +33,10 @@ public class PickProcesMonitor extends JFrame{
 
     public JButton getStopProcesButton() {
         return stopProcesButton;
+    }
+
+    public JButton getResetProcesButton() {
+        return resetProcesButton;
     }
 
     public JButton getFinishButton() {

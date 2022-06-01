@@ -50,6 +50,7 @@ public class MainFrame extends JFrame implements ActionListener {
             this.packMonitor = this.pickProcesMonitorPanel.getPackMonitor();
             pickProcesPanel = new PickProces(order);
             this.pickProcesMonitorPanel.getStopProcesButton().addActionListener(this);
+            this.pickProcesMonitorPanel.getResetProcesButton().addActionListener(this);
             checkOrderMessage.setText("");
         } catch (Exception e) {
             checkOrderMessage.setText("order has already been picked");
@@ -139,6 +140,12 @@ public class MainFrame extends JFrame implements ActionListener {
             nextStep("finish");
         } else if (e.getSource() == this.pickProcesMonitorPanel.getStopProcesButton()) {
             tspProces.noodStop(connection.getPort1());
+        } else if (e.getSource() == this.pickProcesMonitorPanel.getResetProcesButton()) {
+
+            tspProces.resetProces(connection.getPort1());
+            connection.getPort1().closePort();
+            nextStep("resetOrder");
+
         }
     }
 
@@ -170,6 +177,22 @@ public class MainFrame extends JFrame implements ActionListener {
                     }
 
 
+                break;
+            case "resetOrder":
+                // reset knop
+                try {
+                    pickMonitor.reset();
+                    order = new Order(orderID);
+                    connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
+                    order.unpackProducts();
+                    pickProcesPanel = new PickProces(order);
+                    setContentPane(pickProcesPanel.getPickProces());
+                    this.pickProcesPanel.getNextButton().addActionListener(this);
+                    this.pickProcesPanel.getCancelButton().addActionListener(this);
+                    revalidate();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
                 break;
             case "pickProcesMonitor":
                 pickProcesPanel.executeTspAlgoritme(order);
