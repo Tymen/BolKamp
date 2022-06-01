@@ -5,6 +5,7 @@ import com.fazecast.jSerialComm.SerialPort;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -12,9 +13,12 @@ public class StartProcess {
     private ArrayList<Integer[]> shortestPath;
     Thread thrd;
     private PickMonitor pickMonitor;
+    private PackMonitor packMonitor;
     private boolean gestopt;
 
-    private boolean checkStatus(SerialPort port) {
+    private Order order;
+
+    private boolean checkStatusTSP(SerialPort port) {
         port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
         port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 10, 0);
         port.setBaudRate(9600);
@@ -33,28 +37,64 @@ public class StartProcess {
         return true;
     }
 
+    private boolean checkStatusBPP(SerialPort port2) {
+        port2.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
+        port2.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
+        port2.setBaudRate(9600);
+        Scanner s1 = new Scanner(port2.getInputStream());
+        System.out.println("d");
+        while (true) {
+            String line = s1.next();
+            if(!line.equals("0")) {
+                System.out.println(line);
+                packMonitor.repaint();
+                System.out.println("Box on correct place");
+                break;
+            }
+        }
+        s1.close();
+        return true;
+    }
 
-    public void startPickProcess(Order order, SerialPort port, PickMonitor pickMonitor) {
+    public void startPickProcess(Order order, SerialPort portTSP, SerialPort portBPP, PickMonitor pickMonitor, PackMonitor packMonitor) {
         // krijg de shortest path van TSP
-        OutputStream ou = port.getOutputStream();
+        OutputStream ou1 = portTSP.getOutputStream();
+        OutputStream ou2 = portBPP.getOutputStream();
         shortestPath = order.getShortestPath();
+
+        this.packMonitor = packMonitor;
+        this.order = order;
+
         thrd = new Thread() {
             @Override
             public void run() {
                 // voor elke locatie ga je door een for loop om die te writen op de Arduino
                 for(Integer[] location :shortestPath) {
                     try {
-                        ou.write(location[0]);
+                        System.out.println("a");
+                        Product currentProduct = findProduct(location);
+                        System.out.println("b");
+                        ou2.write(getBoxNumberProduct(currentProduct));
+                        System.out.println("c");
+                        checkStatusBPP(portBPP);
+                        ou1.write(location[0]);
                         TimeUnit.SECONDS.sleep(1);
-                        ou.write(location[1]);
+                        ou1.write(location[1]);
                         System.out.println(location[0] + " " + location[1]);
-                        checkStatus(port);
+
+                        if(checkStatusTSP(portTSP)) {
+                            pickedProduct(currentProduct);
+                        }
+
+                        packMonitor.repaint();
                         pickMonitor.nextBox();
+                        TimeUnit.SECONDS.sleep(2);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-                finishProcess(ou);
+                finishProcessTSP(ou1);
+                finishProcessBPP(ou2);
             }
         };
         thrd.start();
@@ -81,12 +121,52 @@ public class StartProcess {
         } catch (IOException ignored) {}
     }
 
-    private void finishProcess(OutputStream ou) {
+    private void finishProcessTSP(OutputStream ou) {
         try {
             ou.write(7);
             System.out.println("Go home");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void finishProcessBPP(OutputStream ou) {
+        try {
+            ou.write(7);
+            System.out.println("Box on 1");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getBoxNumberProduct(Product product) {
+        for (Box box : order.getChosenBoxes()) {
+            for (Product p : box.getProductsInBox()) {
+                if(p.equals(product)) {
+                    packMonitor.setCurrentBox(box.getBoxNumber());
+                    return box.getBoxNumber();
+                }
+            }
+        }
+        return 0;
+    }
+
+    private void pickedProduct(Product product) {
+        for(Box box : order.getChosenBoxes()) {
+            for (Product p : box.getProductsInBox()) {
+                if (p.equals(product)) {
+                    box.addPacked(product);
+                }
+            }
+        }
+    }
+
+    private Product findProduct(Integer[] location) {
+        for(Product product : order.getProductList()) {
+            if(Arrays.equals(product.getLocatie(), location)) {
+                return product;
+            }
+        }
+        return null;
     }
 }

@@ -26,7 +26,7 @@ public class PickProcesMonitor extends JFrame{
         this.packMonitor = new PackMonitor();
         packMonitorPanel.add(packMonitor);
         packMonitorPanel.revalidate();
-        this.pickMonitor = new PickMonitor();
+        this.pickMonitor = new PickMonitor(packMonitor);
         pickMonitorPanel.add(this.pickMonitor);
         pickMonitorPanel.revalidate();
     }
@@ -60,6 +60,7 @@ public class PickProcesMonitor extends JFrame{
         orderIdLabel.setText("Order ID: " + order.getOrderID());
         date.setText("Datum: " + new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         aantalDozen.setText("Dozen: " + order.getChosenBoxes().size());
+        pickMonitor.setOrder(order);
     }
 
 }
