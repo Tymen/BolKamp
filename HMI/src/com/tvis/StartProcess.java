@@ -26,7 +26,7 @@ public class StartProcess {
         while (true) {
             String line = s1.next();
             if(line.equals("j") || line.equals("6")) {
-                System.out.println("I should be done now");
+                System.out.println("Product picked");
                 break;
             } else if(line.equals("202")) {
                 System.out.println("Proces is gestopt!");
