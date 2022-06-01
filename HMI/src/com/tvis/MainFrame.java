@@ -3,7 +3,6 @@ package com.tvis;
 import com.fazecast.jSerialComm.SerialPort;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -159,7 +158,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
                     try {
                         order = new Order(orderID, devMode);
-                        //connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
+                        connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
 
                         try {
                             order.unpackProducts();
@@ -182,7 +181,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 // reset knop
                 try {
                     pickMonitor.reset();
-                    order = new Order(orderID);
+                    order = new Order(orderID, devMode);
                     connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
                     order.unpackProducts();
                     pickProcesPanel = new PickProces(order);
@@ -190,7 +189,7 @@ public class MainFrame extends JFrame implements ActionListener {
                     this.pickProcesPanel.getNextButton().addActionListener(this);
                     this.pickProcesPanel.getCancelButton().addActionListener(this);
                     revalidate();
-                } catch (SQLException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 break;
