@@ -12,28 +12,28 @@ import java.sql.SQLException;
 public class MainFrame extends JFrame implements ActionListener {
     private JTextField textField1;
     private JButton submitButton;
-    private JLabel pickStatus;
-    private JLabel packStatus;
     private JPanel mainPanel;
     private ImageIcon img = new ImageIcon("src/com/tvis/Bolkamp Icon.png");
 
     // Serial Connection variables
-    private SerialConnect connection;
-    private JComboBox<SerialPort> serialPorts;
+    private SerialConnect connectionTSP;
+    private SerialConnect connectionBPP;
+    private JComboBox<SerialPort> serialPort1;
+    private JComboBox<SerialPort> serialPort2;
 
     private PickProces pickProcesPanel;
     private PickProcesMonitor pickProcesMonitorPanel;
     private PickMonitor pickMonitor;
     private PackMonitor packMonitor;
 
-    private StartProcess tspProces = new StartProcess();
+    private StartProcess Proces = new StartProcess();
 
     private Order order;
 
     private int orderID;
 
-    public StartProcess getTspProces() {
-        return tspProces;
+    public StartProcess getProces() {
+        return Proces;
     }
 
     public MainFrame () throws SQLException {
@@ -59,7 +59,8 @@ public class MainFrame extends JFrame implements ActionListener {
         // SerialPort combobox om de devices to selecteren.
         SerialPort[] ports = new SerialConnect().getPortArray();
         for(SerialPort port : ports) {
-            serialPorts.addItem(port);
+            serialPort1.addItem(port);
+            serialPort2.addItem(port);
         }
 
         submitButton.addActionListener(this);
@@ -127,7 +128,7 @@ public class MainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == this.pickProcesMonitorPanel.getFinishButton()) {
             nextStep("finish");
         } else if (e.getSource() == this.pickProcesMonitorPanel.getStopProcesButton()) {
-            tspProces.noodStop(connection.getPort1());
+            Proces.noodStop(connectionTSP.getPort1());
         }
     }
 
@@ -139,7 +140,8 @@ public class MainFrame extends JFrame implements ActionListener {
                     orderID = Integer.parseInt(textField1.getText());
                     order = new Order(orderID);
 
-                    connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
+                    connectionTSP = new SerialConnect((SerialPort) serialPort1.getSelectedItem());
+                    connectionBPP = new SerialConnect((SerialPort) serialPort2.getSelectedItem());
 
                     order.unpackProducts();
 
@@ -159,7 +161,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 setInfo(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
-                tspProces.startPickProcess(order, connection.getPort1(), pickMonitor);
+                Proces.startPickProcess(order, connectionTSP.getPort1(), connectionBPP.getPort1(), pickMonitor, packMonitor);
                 break;
             case "firstStep":
                 setContentPane(mainPanel);
@@ -169,7 +171,8 @@ public class MainFrame extends JFrame implements ActionListener {
                 setContentPane(mainPanel);
                 revalidate();
                 // disconnect device aan het einde van het proces.
-                connection.disconnectDevice();
+                connectionTSP.disconnectDevice();
+                connectionBPP.disconnectDevice();
                 break;
             default:
                 break;
