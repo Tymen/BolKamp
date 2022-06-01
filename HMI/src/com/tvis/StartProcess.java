@@ -14,6 +14,7 @@ public class StartProcess {
     Thread thrd;
     private PickMonitor pickMonitor;
     private PackMonitor packMonitor;
+    private boolean gestopt;
 
     private Order order;
 
@@ -29,6 +30,7 @@ public class StartProcess {
                 break;
             } else if(line.equals("202")) {
                 System.out.println("Proces is gestopt!");
+
             }
         }
         s1.close();
@@ -101,8 +103,20 @@ public class StartProcess {
     public void noodStop(SerialPort port) {
         OutputStream ou = port.getOutputStream();
         try {
-            System.out.println("gestopt");
-            ou.write(999);
+            if (!gestopt) {
+                System.out.println("gestopt");
+                ou.write(3);
+            }
+
+
+        } catch (IOException ignored) {}
+    }
+
+    public void resetProces(SerialPort port) {
+        OutputStream ou = port.getOutputStream();
+        try {
+            System.out.println("reset request send");
+            ou.write(4);
 
         } catch (IOException ignored) {}
     }

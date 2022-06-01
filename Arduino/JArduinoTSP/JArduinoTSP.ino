@@ -12,6 +12,9 @@ int writeAmount = 0;
 
 int pauseMotor = 50;
 
+const int btnPin = 3;
+int buttonState = 0;
+
 unsigned long startTime;
 unsigned long newTime;
 
@@ -35,6 +38,8 @@ void setup() {
 
   rbt.attach(9);
   rbt.write(90);
+
+  pinMode(btnPin, INPUT);
   
   pinMode(13, OUTPUT);
   pinMode(A0, INPUT);
@@ -46,7 +51,9 @@ void setup() {
   pinMode(M2, OUTPUT);
   pinMode(E2, OUTPUT);
   pinMode(E1, OUTPUT);
+  
   Serial.begin(9600);
+  hardReset();
 }
 
 void loop() {
@@ -61,39 +68,68 @@ void loop() {
   }
   }
 
-  if(location[0] == 999) {
-      noodStop();
-      location[0] = 0;
-      nood = true;
-  } else if(location[0] == 555) {
-      hardReset();
-      nood = false;
-  }
+  
+    checkStop();
 
+    if(location[1] > 0 && location[0] > 0) {
+      if(nood) {
+          checkStop();
+          location[0] = 0;
+          location[1] = 0;
+          nood = true;
+      }else{
+      
+      moveX = location[0] - oldLocation[0];
+      moveY = location[1] - oldLocation[1];
 
-  if(!nood){
-      if(location[1] > 0 && location[0] > 0) {
-        moveX = location[0] - oldLocation[0];
-        moveY = location[1] - oldLocation[1];
-
-        if(moveX < 0) {
-          moveX = -moveX;
-          goDown(moveX);
-        } else {
-          goUp(moveX);
-        }
-        if(moveY < 0) {
-          moveY = -moveY;
-          goLeft(moveY);
-        } else {
-          goRight(moveY);
-        }
-        oldLocation[0] = location[0];
-        oldLocation[1] = location[1];
-        location[0] = 0;
-        location[1] = 0;
-        goPush();
+      if(moveX < 0) {
+        moveX = -moveX;
+        goDown(moveX);
+      } else {
+        goUp(moveX);
       }
+      if(moveY < 0) {
+        moveY = -moveY;
+        goLeft(moveY);
+      } else {
+        goRight(moveY);
+      }
+      oldLocation[0] = location[0];
+      oldLocation[1] = location[1];
+      location[0] = 0;
+      location[1] = 0;
+      goPush();
+    }
+    }
+
+}
+
+void resetVars() {
+  location[0] = 0;
+  location[1] = 0;
+  oldLocation[0] = 1;
+  oldLocation[1] = 1;
+  
+  isPicked = false;
+  writeAmount = 0;
+  
+  buttonState = 0;
+  
+  moveX = 0;
+  moveY = 0;
+  
+  nood = false;
+}
+
+void checkStop() {
+  
+  if(Serial.read() == 3) {
+      nood = true;
+      location[0] = 0;
+      noodStop();
+  }else if(Serial.read() == 4) {
+      Serial.println(203);
+      hardReset();
   }
 }
 
@@ -102,10 +138,30 @@ void noodStop() {
   analogWrite(E2, 0);
   rbt.write(90);
   Serial.println(202);
+  
 }
 
 void hardReset() {
+    
+    while (digitalRead(btnPin) == LOW) {
+      rbt.write(45);
+    }
+    rbt.write(90);
+    
+    resetVars(); // dan is boolean nood leeg en kan ie naar beneden
 
+for(int i = 1; i <= 5; i++) {
+    startTime = millis();
+    newTime = millis();
+    while (startTime + 500 > newTime) {
+        digitalWrite(M1, HIGH);
+        analogWrite(E1, 200);
+        newTime = millis();
+    }
+  }
+  digitalWrite(M1, LOW);
+    
+//    goDown(5);
 }
 
 void goUp(int up) {
@@ -113,9 +169,12 @@ void goUp(int up) {
     startTime = millis();
     newTime = millis();
     while (startTime + 900 > newTime) {
-      digitalWrite(M1, LOW);
-      analogWrite(E1, 255);
-      newTime = millis();
+      checkStop();
+      if(!nood){
+        digitalWrite(M1, LOW);
+        analogWrite(E1, 255);
+        newTime = millis();
+      }
     }
   }
   analogWrite(E1, LOW);
@@ -128,9 +187,12 @@ void goDown(int down) {
     startTime = millis();
     newTime = millis();
     while (startTime + 500 > newTime) {
-      digitalWrite(M1, HIGH);
-      analogWrite(E1, 200);
-      newTime = millis();
+      checkStop();
+      if(nood == false){
+        digitalWrite(M1, HIGH);
+        analogWrite(E1, 200);
+        newTime = millis();
+      }
     }
   }
   digitalWrite(M1, LOW);
@@ -143,8 +205,11 @@ void goLeft(int left) {
      startTime = millis();
      newTime = millis();
      while (startTime + 1500 > newTime) {
-        rbt.write(45);
-       newTime = millis();
+        checkStop();
+        if(!nood){
+          rbt.write(45);
+          newTime = millis();
+        }
      }
   }
   rbt.write(90);
@@ -155,8 +220,11 @@ void goRight(int right) {
     startTime = millis();
     newTime = millis();
     while (startTime + 1500 > newTime) {
+      checkStop();
+      if(!nood){
       rbt.write(135);
       newTime = millis();
+      }
     }
   }
   rbt.write(90);
@@ -166,19 +234,26 @@ void goPush() {
   startTime = millis();
   newTime = millis();
   analogWrite(E1, pauseMotor);
+  checkStop();
 
-  while (startTime + 750 > newTime) {
-      digitalWrite(M2, HIGH);
-      analogWrite(E2, 255);
-      newTime = millis();
+  while (startTime + 1500 > newTime) {
+      checkStop();
+      if(!nood){
+        digitalWrite(M2, HIGH);
+        analogWrite(E2, 255);
+        newTime = millis();
+      }
   }
 
   startTime = millis();
 
-  while (startTime + 750 > newTime) {
+  while (startTime + 1600 > newTime) {
+    checkStop();
+    if(!nood){
     digitalWrite(M2, LOW);
     analogWrite(E2, 255);
     newTime = millis();
+    }
   }
   analogWrite(E2, 0);
   Serial.println(6);

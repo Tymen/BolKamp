@@ -73,13 +73,20 @@ public class PickMonitor extends JPanel {
     }
 
     public void drawPath() {
+        canvas.setColor(Color.blue);
+        Graphics2D g2 = (Graphics2D) canvas;
+        g2.setStroke(new BasicStroke(10));
+        StorageBox storageBoxFirst = getStorageBox(productenToBePicked.get(0));
+        int firstX = storageBoxFirst.getX() + ((canvasWidth - (sizeBetween * 4)) / 5) / 2;
+        int firstY = storageBoxFirst.getY() + ((canvasHeight - (sizeBetween * 4)) / 5) / 2;
+
+        canvas.drawLine(0, canvasHeight, firstX, firstY);
+
         for (int i = 0; i < productenToBePicked.size() - 1; i++) {
             StorageBox storageBox1 = getStorageBox(productenToBePicked.get(i));
             StorageBox storageBox2 = getStorageBox(productenToBePicked.get(i + 1));
 
             canvas.setColor(Color.blue);
-            Graphics2D g2 = (Graphics2D) canvas;
-            g2.setStroke(new BasicStroke(10));
 
             int x1 = storageBox1.getX() + ((canvasWidth - (sizeBetween * 4)) / 5) / 2;
             int x2 = storageBox2.getX() + ((canvasWidth - (sizeBetween * 4)) / 5) / 2;

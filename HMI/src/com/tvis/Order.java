@@ -14,27 +14,52 @@ public class Order {
 
     private ArrayList<Integer[]> shortestPath = new ArrayList<>();
 
-    public Order(int orderId) throws SQLException {
+    public Order(int orderId, boolean devMode) throws Exception {
         this.orderID = orderId;
 
-        // resultset maken, deze vang later de data op
-        ResultSet rs = null;
         // connectie weer terug krijgen v.d. DbConnect class
         Connection con = connect.getConnection();
-        // createStatement "prepared" een statement, vervolgens met executeQuery voert het een query uit
-        try {
-            Statement q1 = con.createStatement();
-            rs = q1.executeQuery("SELECT si.StockItemID, si.StockItemName, si.Size, si.Location, oi.Quantity FROM stockitems si INNER JOIN orderlines oi ON oi.StockItemID = si.StockItemID WHERE si.StockItemID IN (SELECT StockItemID FROM orderlines WHERE orderID = " + orderId + ") AND oi.orderID = " + orderId);
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-        // hier wordt een arraylist gevuld met producten
-        productList = new ArrayList<>();
-        if(rs != null) {
-            while (rs.next()) {
-                Integer[] locatie = locatieArrayToIntegerArraylist(rs.getInt(4));
-                productList.add(new Product(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(5), locatie));
+
+        int isPicked = 0;
+
+        if (!devMode) {
+            // createStatement "prepared" een statement, vervolgens met executeQuery voert het een query uit
+            ResultSet resultSet = null;
+            try {
+                Statement checkOrderQuery = con.createStatement();
+                resultSet = checkOrderQuery.executeQuery("SELECT isPicked FROM orders WHERE OrderID = " + orderId);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
+
+            if (resultSet != null) {
+                if (resultSet.next()) {
+                    isPicked = resultSet.getInt(1);
+                }
+            }
+        }
+
+        if (isPicked == 0) {
+            // resultset maken, deze vang later de data op
+            ResultSet rs = null;
+
+            try {
+                Statement q1 = con.createStatement();
+                rs = q1.executeQuery("SELECT si.StockItemID, si.StockItemName, si.Size, si.Location, oi.Quantity FROM stockitems si INNER JOIN orderlines oi ON oi.StockItemID = si.StockItemID WHERE si.StockItemID IN (SELECT StockItemID FROM orderlines WHERE orderID = " + orderId + ") AND oi.orderID = " + orderId);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            // hier wordt een arraylist gevuld met producten
+            productList = new ArrayList<>();
+            if (rs != null) {
+                while (rs.next()) {
+                    Integer[] locatie = locatieArrayToIntegerArraylist(rs.getInt(4));
+                    productList.add(new Product(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(5), locatie));
+                }
+            }
+        } else {
+            throw new Exception("Order has already been picked");
         }
     }
 
@@ -78,5 +103,16 @@ public class Order {
 
     public ArrayList<Box> getChosenBoxes() {
         return chosenBoxes;
+    }
+
+    public void setPicked() {
+        // connectie weer terug krijgen v.d. DbConnect class
+        Connection con = connect.getConnection();
+        try {
+            Statement checkOrderQuery = con.createStatement();
+            checkOrderQuery.executeUpdate("UPDATE orders SET isPicked = 1 WHERE OrderID = " + orderID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
