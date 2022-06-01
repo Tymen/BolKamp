@@ -12,7 +12,7 @@ public class PickProcesMonitor extends JFrame{
     private JPanel pickProcesMonitor;
     private JButton finishButton;
     private JButton stopProcesButton;
-    private JButton pauseProcesButton;
+    private JButton resetProcesButton;
     private JPanel packMonitorPanel;
     private JPanel orderInfoPanel;
     private JLabel date;
@@ -26,13 +26,17 @@ public class PickProcesMonitor extends JFrame{
         this.packMonitor = new PackMonitor();
         packMonitorPanel.add(packMonitor);
         packMonitorPanel.revalidate();
-        this.pickMonitor = new PickMonitor();
+        this.pickMonitor = new PickMonitor(packMonitor);
         pickMonitorPanel.add(this.pickMonitor);
         pickMonitorPanel.revalidate();
     }
 
     public JButton getStopProcesButton() {
         return stopProcesButton;
+    }
+
+    public JButton getResetProcesButton() {
+        return resetProcesButton;
     }
 
     public JButton getFinishButton() {
@@ -56,5 +60,7 @@ public class PickProcesMonitor extends JFrame{
         orderIdLabel.setText("Order ID: " + order.getOrderID());
         date.setText("Datum: " + new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         aantalDozen.setText("Dozen: " + order.getChosenBoxes().size());
+        pickMonitor.setOrder(order);
     }
+
 }

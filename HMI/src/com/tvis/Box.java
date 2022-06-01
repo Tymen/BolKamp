@@ -8,6 +8,7 @@ public class Box {
     private int boxNumber;
     private int boxSize;
     private int remainingSize;
+    private ArrayList<Product> packedProducts;
 
     static int boxes;
 
@@ -17,11 +18,20 @@ public class Box {
         this.boxSize = boxSize;
         this.productsInBox = new ArrayList<>();
         this.remainingSize = boxSize;
+        this.packedProducts = new ArrayList<>();
     }
 
     public void addProduct(Product product) {
         this.productsInBox.add(product);
         this.remainingSize -= product.getSize();
+    }
+
+    public void addPacked(Product product) {
+        this.packedProducts.add(product);
+    }
+
+    public ArrayList<Product> getPackedProducts() {
+        return packedProducts;
     }
 
     public ArrayList<Product> getProductsInBox() {
@@ -36,6 +46,7 @@ public class Box {
         return boxNumber;
     }
 
+    // voor dev
     @Override
     public String toString() {
         return "Box{" +

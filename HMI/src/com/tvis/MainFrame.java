@@ -7,38 +7,53 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.Serial;
 import java.sql.SQLException;
 
 public class MainFrame extends JFrame implements ActionListener {
+    private final boolean devMode;
     private JTextField textField1;
     private JButton submitButton;
-    private JLabel pickStatus;
-    private JLabel packStatus;
     private JPanel mainPanel;
-    private ImageIcon img = new ImageIcon("HMI/src/com/tvis/Bolkamp Icon.png");
+    private ImageIcon img = new ImageIcon("src/com/tvis/Bolkamp Icon.png");
 
     // Serial Connection variables
-    private SerialConnect connection;
-    private JComboBox<SerialPort> serialPorts;
+    private SerialConnect connectionTSP;
+    private SerialConnect connectionBPP;
+    private JComboBox<SerialPort> serialPort1;
+    private JComboBox<SerialPort> serialPort2;
+    private JLabel checkOrderMessage;
 
     private PickProces pickProcesPanel;
     private PickProcesMonitor pickProcesMonitorPanel;
     private PickMonitor pickMonitor;
     private PackMonitor packMonitor;
 
-    private StartProcess tspProces = new StartProcess();
+    private StartProcess Proces = new StartProcess();
 
     private Order order;
 
     private int orderID;
 
-    public MainFrame () throws SQLException {
-        order = new Order(orderID);
-        setPickProcesMonitor(new PickProcesMonitor());
-        this.pickMonitor = this.pickProcesMonitorPanel.getPickMonitor();
-        this.packMonitor = this.pickProcesMonitorPanel.getPackMonitor();
-        pickProcesPanel = new PickProces(order);
+    public StartProcess getProces() {
+        return Proces;
+    }
+
+    public MainFrame (boolean devMode) throws SQLException {
+        this.devMode = devMode;
+
+        try {
+            order = new Order(orderID, devMode);
+
+            setPickProcesMonitor(new PickProcesMonitor());
+            this.pickMonitor = this.pickProcesMonitorPanel.getPickMonitor();
+            this.packMonitor = this.pickProcesMonitorPanel.getPackMonitor();
+            pickProcesPanel = new PickProces(order);
+            this.pickProcesMonitorPanel.getStopProcesButton().addActionListener(this);
+            this.pickProcesMonitorPanel.getResetProcesButton().addActionListener(this);
+            checkOrderMessage.setText("");
+        } catch (Exception e) {
+            checkOrderMessage.setText("order has already been picked");
+        }
 
         setFrameSettings();
     }
@@ -55,7 +70,8 @@ public class MainFrame extends JFrame implements ActionListener {
         // SerialPort combobox om de devices to selecteren.
         SerialPort[] ports = new SerialConnect().getPortArray();
         for(SerialPort port : ports) {
-            serialPorts.addItem(port);
+            serialPort1.addItem(port);
+            serialPort2.addItem(port);
         }
 
         submitButton.addActionListener(this);
@@ -122,6 +138,13 @@ public class MainFrame extends JFrame implements ActionListener {
             nextStep("firstStep");
         } else if (e.getSource() == this.pickProcesMonitorPanel.getFinishButton()) {
             nextStep("finish");
+        } else if (e.getSource() == this.pickProcesMonitorPanel.getStopProcesButton()) {
+            Proces.noodStop(connectionTSP.getPort1());
+        } else if (e.getSource() == this.pickProcesMonitorPanel.getResetProcesButton()) {
+
+            Proces.resetProces(connection.getPort1());
+            connection.getPort1().closePort();
+            nextStep("resetOrder");
         }
     }
 
@@ -129,46 +152,80 @@ public class MainFrame extends JFrame implements ActionListener {
         switch (step){
             case "selectOrder":
                 // wanneer er een order is ingevoerd wordt er een PickProcesPanel opgesteld op basis van het ordernr
-                try {
                     orderID = Integer.parseInt(textField1.getText());
                     textField1.setText("");
                     pickMonitor.reset();
-                    order = new Order(orderID);
+
+                    try {
+                        order = new Order(orderID, devMode);
+                        connectionTSP = new SerialConnect((SerialPort) serialPort1.getSelectedItem());
+                        connectionBPP = new SerialConnect((SerialPort) serialPort2.getSelectedItem());
+
+                        try {
+                            order.unpackProducts();
+                            pickProcesPanel = new PickProces(order);
+                            setContentPane(pickProcesPanel.getPickProces());
+                            this.pickProcesPanel.getNextButton().addActionListener(this);
+                            this.pickProcesPanel.getCancelButton().addActionListener(this);
+                            revalidate();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                        checkOrderMessage.setText("");
+                    } catch (Exception e) {
+                        checkOrderMessage.setText("order has already been picked");
+                    }
+
+
+                break;
+            case "resetOrder":
+                // reset knop
+                try {
+                    pickMonitor.reset();
+                    order = new Order(orderID, devMode);
                     connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
                     order.unpackProducts();
+
+                    textField1.setText("");
+                    pickMonitor.reset();
+
                     pickProcesPanel = new PickProces(order);
                     setContentPane(pickProcesPanel.getPickProces());
                     this.pickProcesPanel.getNextButton().addActionListener(this);
                     this.pickProcesPanel.getCancelButton().addActionListener(this);
                     revalidate();
-                } catch (SQLException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 break;
             case "pickProcesMonitor":
-                pickProcesPanel.executeTspAlgoritme(order);
-                pickMonitor.setProductenToBePicked(order);
-                pickProcesPanel.executeBppAlgoritme(order);
-                packMonitor.setOrder(order);
-                pickProcesMonitorPanel.setOrder(order);
+                setInfo(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
-                pickMonitor.demoPicker();
-                tspProces.startPickProcess(order, connection.getPort1());
+                Proces.startPickProcess(order, connectionTSP.getPort1(), connectionBPP.getPort1(), pickMonitor, packMonitor);
                 break;
             case "firstStep":
                 setContentPane(mainPanel);
                 revalidate();
                 break;
             case "finish":
+                order.setPicked();
                 setContentPane(mainPanel);
                 revalidate();
                 // disconnect device aan het einde van het proces.
-                connection.disconnectDevice();
+                connectionTSP.disconnectDevice();
+                connectionBPP.disconnectDevice();
                 break;
             default:
                 break;
         }
     }
 
+    public void setInfo(Order order) {
+        pickProcesPanel.executeTspAlgoritme(order);
+        pickMonitor.setProductenToBePicked(order);
+        pickProcesPanel.executeBppAlgoritme(order);
+        packMonitor.setOrder(order);
+        pickProcesMonitorPanel.setOrder(order);
+    }
 }
