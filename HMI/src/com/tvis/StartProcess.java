@@ -12,6 +12,7 @@ public class StartProcess {
     private ArrayList<Integer[]> shortestPath;
     Thread thrd;
     private PickMonitor pickMonitor;
+    private boolean gestopt;
 
     private boolean checkStatus(SerialPort port) {
         port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
@@ -25,11 +26,13 @@ public class StartProcess {
                 break;
             } else if(line.equals("202")) {
                 System.out.println("Proces is gestopt!");
+
             }
         }
         s1.close();
         return true;
     }
+
 
     public void startPickProcess(Order order, SerialPort port, PickMonitor pickMonitor) {
         // krijg de shortest path van TSP
@@ -60,8 +63,20 @@ public class StartProcess {
     public void noodStop(SerialPort port) {
         OutputStream ou = port.getOutputStream();
         try {
-            System.out.println("gestopt");
-            ou.write(999);
+            if (!gestopt) {
+                System.out.println("gestopt");
+                ou.write(3);
+            }
+
+
+        } catch (IOException ignored) {}
+    }
+
+    public void resetProces(SerialPort port) {
+        OutputStream ou = port.getOutputStream();
+        try {
+            System.out.println("reset request send");
+            ou.write(4);
 
         } catch (IOException ignored) {}
     }
