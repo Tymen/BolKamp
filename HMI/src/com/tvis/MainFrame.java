@@ -142,8 +142,8 @@ public class MainFrame extends JFrame implements ActionListener {
             Proces.noodStop(connectionTSP.getPort1());
         } else if (e.getSource() == this.pickProcesMonitorPanel.getResetProcesButton()) {
 
-            Proces.resetProces(connection.getPort1());
-            connection.getPort1().closePort();
+            Proces.resetProces(connectionTSP.getPort1());
+            connectionTSP.getPort1().closePort();
             nextStep("resetOrder");
         }
     }
@@ -183,7 +183,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 try {
                     pickMonitor.reset();
                     order = new Order(orderID, devMode);
-                    connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
+                    connectionTSP = new SerialConnect((SerialPort) serialPort1.getSelectedItem());
                     order.unpackProducts();
 
                     textField1.setText("");
