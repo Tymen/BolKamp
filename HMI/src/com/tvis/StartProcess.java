@@ -35,16 +35,16 @@ public class StartProcess {
         return true;
     }
 
-    private boolean checkStatusBPP(SerialPort port) {
-        port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
-        port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 10, 0);
-        port.setBaudRate(9600);
-        Scanner s1 = new Scanner(port.getInputStream());
+    private boolean checkStatusBPP(SerialPort port2) {
+        port2.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
+        port2.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
+        port2.setBaudRate(9600);
+        Scanner s1 = new Scanner(port2.getInputStream());
         System.out.println("d");
         while (true) {
             String line = s1.next();
-            if(line.equals("6")) {
-                System.out.println("e");
+            if(!line.equals("0")) {
+                System.out.println(line);
                 packMonitor.repaint();
                 System.out.println("Box on correct place");
                 break;
