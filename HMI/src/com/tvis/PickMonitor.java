@@ -138,15 +138,14 @@ public class PickMonitor extends JPanel {
     public void setProductenToBePicked(Order order) {
         productenToBePicked = new ArrayList<>(order.getShortestPath().size()){};
 
-        for (int i = 0; i < order.getShortestPath().size(); i++) {
-            productenToBePicked.add(order.getShortestPath().get(i));
-        }
+        productenToBePicked.addAll(order.getShortestPath());
 
         productStatus = new int[productenToBePicked.size()];
     }
     public void reset() {
-        this.productStatus = null;
+        Arrays.fill(productStatus, 0);
         productenToBePicked.clear();
+        currentBox = 0;
         this.wareHouse.clear();
         setupWarehouse();
     }
