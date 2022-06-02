@@ -430,7 +430,8 @@ void goPush() {
   newTime = millis();
   analogWrite(E1, pauseMotor);
   checkStop();
-  while (startTime + 1500 > newTime) {
+
+  while (startTime + 1900 > newTime) {
       checkStop();
       if(!nood){
         digitalWrite(M2, HIGH);
@@ -441,7 +442,7 @@ void goPush() {
 
   startTime = millis();
 
-  while (startTime + 1600 > newTime) {
+  while (startTime + 1980 > newTime) {
     checkStop();
     if(!nood){
     digitalWrite(M2, LOW);
