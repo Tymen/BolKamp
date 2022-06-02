@@ -454,9 +454,9 @@ void goPush() {
   while (startTime + 1940 > newTime) {
     checkStop();
     if(!nood){
-    digitalWrite(M2, LOW);
-    analogWrite(E2, 255);
-    newTime = millis();
+      digitalWrite(M2, LOW);
+      analogWrite(E2, 255);
+      newTime = millis();
     }
   }
   analogWrite(E2, 0);
