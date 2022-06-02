@@ -113,6 +113,7 @@ public class StartProcess {
         try {
             System.out.println("reset request send");
             ou.write(4);
+            thrd.interrupt();
 
         } catch (IOException ignored) {}
     }
