@@ -73,6 +73,7 @@ public class MainFrame extends JFrame implements ActionListener {
             serialPort1.addItem(port);
             serialPort2.addItem(port);
         }
+        serialPort2.setSelectedIndex(1);
 
         submitButton.addActionListener(this);
         this.textField1.addKeyListener(new KeyListener(){

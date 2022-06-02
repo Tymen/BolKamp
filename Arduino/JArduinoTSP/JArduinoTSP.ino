@@ -100,14 +100,19 @@ void loop() {
     } else if(moveX < 0 && moveY < 0) {
       moveX = -moveX;
       moveY = -moveY;
-      if(moveY * 1500 > moveX * 900) {
+      if(moveY * 1500 > moveX * 500) {
         goLeftDown(moveY, moveX);
       } else {
         goDownLeft(moveX, moveY);
       }
     } else if(moveX < 0 && moveY > 0){
       moveX = -moveX;
-      goDownRight(moveX, moveY);
+      moveY = -moveY;
+      if(moveY * 1500 > moveX * 500) {
+        goRightDown(moveY, moveX);
+      } else {
+        goDownRight(moveX, moveY);
+      }
     } else if(moveX > 0 && moveY < 0){
       moveY = -moveY;
       if(moveY * 1500 > moveX * 900) {
@@ -116,7 +121,11 @@ void loop() {
         goUpLeft(moveX, moveY);
       }
     } else {
-      goUpRight(moveY, moveX);
+      if (moveY * 1500 > moveX * 900) {
+        goRightUp(moveY, moveX);
+      } else {
+        goUpRight(moveX, moveY);
+      }
     }
     oldLocation[0] = location[0];
     oldLocation[1] = location[1];
@@ -124,7 +133,7 @@ void loop() {
     location[1] = 0;
     goPush();
     }
-   }
+  }
 }
 
 void resetVars() {
@@ -277,9 +286,9 @@ void goDownLeft(int down, int left) {
   startTime = millis();
   newTime = millis();
   
-  while (startTime + (900 * down) > newTime) {
+  while (startTime + (500 * down) > newTime) {
     digitalWrite(M1, HIGH);
-    analogWrite(E1, 255);
+    analogWrite(E1, 200);
     
     while (startTime + (left * 1500) > newTime) {
         rbt.write(45);
@@ -302,9 +311,9 @@ void goLeftDown(int left, int down) {
   while(startTime + (1500 * left) > newTime) {
     rbt.write(45);
     
-    while(startTime + (900 * down) > newTime) {
+    while(startTime + (500 * down) > newTime) {
       digitalWrite(M1, HIGH);
-      analogWrite(E1, 255);
+      analogWrite(E1, 200);
       newTime = millis();
     }
     digitalWrite(M1, LOW);
@@ -442,7 +451,7 @@ void goPush() {
 
   startTime = millis();
 
-  while (startTime + 1980 > newTime) {
+  while (startTime + 1940 > newTime) {
     checkStop();
     if(!nood){
     digitalWrite(M2, LOW);
