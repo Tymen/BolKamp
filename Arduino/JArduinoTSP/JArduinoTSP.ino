@@ -82,31 +82,49 @@ void loop() {
           location[0] = 0;
           location[1] = 0;
           nood = true;
-      }else{
+      } else {
       
       moveX = location[0] - oldLocation[0];
       moveY = location[1] - oldLocation[1];
-
-      if(moveX < 0) {
-        moveX = -moveX;
-        goDown(moveX);
+      
+    if(moveX == 0 && moveY > 0) {
+      goRight(moveY);
+    } else if(moveY == 0 && moveX > 0) {
+      goUp(moveX);
+    } else if(moveX == 0 && moveY < 0) {
+      moveY = -moveY;
+      goLeft(moveY);
+    } else if(moveY == 0 && moveX < 0) {
+      moveX = -moveX;
+      goDown(moveX);
+    } else if(moveX < 0 && moveY < 0) {
+      moveX = -moveX;
+      moveY = -moveY;
+      if(moveY * 1500 > moveX * 900) {
+        goLeftDown(moveY, moveX);
       } else {
-        goUp(moveX);
+        goDownLeft(moveX, moveY);
       }
-      if(moveY < 0) {
-        moveY = -moveY;
-        goLeft(moveY);
+    } else if(moveX < 0 && moveY > 0){
+      moveX = -moveX;
+      goDownRight(moveX, moveY);
+    } else if(moveX > 0 && moveY < 0){
+      moveY = -moveY;
+      if(moveY * 1500 > moveX * 900) {
+        goLeftUp(moveY, moveX);
       } else {
-        goRight(moveY);
+        goUpLeft(moveX, moveY);
       }
-      oldLocation[0] = location[0];
-      oldLocation[1] = location[1];
-      location[0] = 0;
-      location[1] = 0;
-      goPush();
+    } else {
+      goUpRight(moveY, moveX);
     }
+    oldLocation[0] = location[0];
+    oldLocation[1] = location[1];
+    location[0] = 0;
+    location[1] = 0;
+    goPush();
     }
-
+   }
 }
 
 void resetVars() {
@@ -146,46 +164,6 @@ void noodStop() {
   
 }
 
-    if(moveX == 0 && moveY > 0) {
-      goRight(moveY);
-    } else if(moveY == 0 && moveX > 0) {
-      goUp(moveX);
-    } else if(moveX == 0 && moveY < 0) {
-      moveY = -moveY;
-      goLeft(moveY);
-    } else if(moveY == 0 && moveX < 0) {
-      moveX = -moveX;
-      goDown(moveX);
-    }
-    if(moveX < 0 && moveY < 0) {
-      moveX = -moveX;
-      moveY = -moveY;
-      goDownLeft(moveX, moveY);
-    } else if(moveX < 0 && moveY > 0){
-      moveX = -moveX;
-      goDownRight(moveX, moveY);
-    } else if(moveX > 0 && moveY < 0){
-      moveY = -moveY;
-      if(moveY * 1500 > moveX * 900) {
-        goLeftUp(moveX, moveY);
-      } else {
-        goUpLeft(moveX, moveY);
-      }
-    } else {
-      goUpRight(moveX, moveY);
-    }
-//    if(moveY < 0) {
-//      moveY = -moveY;
-//      goLeft(moveY);
-//    } else {
-//      goRight(moveY);
-//    }
-    oldLocation[0] = location[0];
-    oldLocation[1] = location[1];
-    location[0] = 0;
-    location[1] = 0;
-    goPush();
-}
 void hardReset() {
     
     while (digitalRead(btnPin) == LOW) {
@@ -225,7 +203,7 @@ void goUpRight(int up, int right) {
     newTime = millis();
   }
   
-  analogWrite(E1, LOW);
+  analogWrite(M1, LOW);
   delay(80);
   analogWrite(E1, pauseMotor);
 }
@@ -242,7 +220,7 @@ void goRightUp(int right, int up) {
       newTime = millis();
     }
     
-    analogWrite(E1, LOW);
+    analogWrite(M1, LOW);
     delay(80);
     analogWrite(E1, pauseMotor);
     newTime = millis();
@@ -264,7 +242,7 @@ void goLeftUp(int left, int up) {
       newTime = millis();
     }
     
-    analogWrite(E1, LOW);
+    analogWrite(M1, LOW);
     delay(80);
     analogWrite(E1, pauseMotor);
     newTime = millis();
@@ -290,7 +268,7 @@ void goUpLeft(int up, int left) {
     newTime = millis();
   }
 
-  analogWrite(E1, LOW);
+  digitalWrite(M1, LOW);
   delay(80);
   analogWrite(E1, pauseMotor);
 }
@@ -312,7 +290,7 @@ void goDownLeft(int down, int left) {
     newTime = millis();
   }
   
-  analogWrite(E1, LOW);
+  digitalWrite(M1, LOW);
   delay(80);
   analogWrite(E1, pauseMotor);
 }
@@ -329,7 +307,7 @@ void goLeftDown(int left, int down) {
       analogWrite(E1, 255);
       newTime = millis();
     }
-    analogWrite(E1, LOW);
+    digitalWrite(M1, LOW);
     delay(80);
     analogWrite(E1, pauseMotor);
     newTime = millis();
@@ -355,7 +333,7 @@ void goDownRight(int down, int right) {
     newTime = millis();
   }
   
-  analogWrite(E1, LOW);
+  digitalWrite(M1, LOW);
   delay(80);
   analogWrite(E1, pauseMotor);
 }
@@ -373,12 +351,11 @@ void goRightDown(int right, int down) {
         newTime = millis();
     }
     
-    analogWrite(E1, LOW);
+    digitalWrite(M1, LOW);
     delay(80);
     analogWrite(E1, pauseMotor);
     newTime = millis();
   }
-  
   rbt.write(90);
 }
 

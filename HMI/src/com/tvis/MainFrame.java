@@ -28,14 +28,14 @@ public class MainFrame extends JFrame implements ActionListener {
     private PickMonitor pickMonitor;
     private PackMonitor packMonitor;
 
-    private StartProcess Proces = new StartProcess();
+    private StartProcess proces = new StartProcess();
 
     private Order order;
 
     private int orderID;
 
     public StartProcess getProces() {
-        return Proces;
+        return proces;
     }
 
     public MainFrame (boolean devMode) throws SQLException {
@@ -139,11 +139,10 @@ public class MainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == this.pickProcesMonitorPanel.getFinishButton()) {
             nextStep("finish");
         } else if (e.getSource() == this.pickProcesMonitorPanel.getStopProcesButton()) {
-            Proces.noodStop(connectionTSP.getPort1());
+            proces.noodStop(connectionTSP.getPort1());
         } else if (e.getSource() == this.pickProcesMonitorPanel.getResetProcesButton()) {
-
-            Proces.resetProces(connection.getPort1());
-            connection.getPort1().closePort();
+            proces.resetProces(connectionTSP.getPort1());
+            connectionTSP.getPort1().closePort();
             nextStep("resetOrder");
         }
     }
@@ -183,7 +182,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 try {
                     pickMonitor.reset();
                     order = new Order(orderID, devMode);
-                    connection = new SerialConnect((SerialPort) serialPorts.getSelectedItem());
+                    connectionTSP = new SerialConnect((SerialPort) serialPort1.getSelectedItem());
                     order.unpackProducts();
 
                     textField1.setText("");
@@ -202,7 +201,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 setInfo(order);
                 setContentPane(getPickProcesMonitor());
                 revalidate();
-                Proces.startPickProcess(order, connectionTSP.getPort1(), connectionBPP.getPort1(), pickMonitor, packMonitor);
+                proces.startPickProcess(order, connectionTSP.getPort1(), connectionBPP.getPort1(), pickMonitor, packMonitor);
                 break;
             case "firstStep":
                 setContentPane(mainPanel);
