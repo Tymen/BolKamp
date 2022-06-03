@@ -42,7 +42,6 @@ public class StartProcess {
         port2.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
         port2.setBaudRate(9600);
         Scanner s1 = new Scanner(port2.getInputStream());
-        System.out.println("d");
         while (true) {
             String line = s1.next();
             if(!line.equals("0")) {
@@ -71,11 +70,8 @@ public class StartProcess {
                 // voor elke locatie ga je door een for loop om die te writen op de Arduino
                 for(Integer[] location :shortestPath) {
                     try {
-                        System.out.println("a");
                         Product currentProduct = findProduct(location);
-                        System.out.println("b");
                         ou2.write(getBoxNumberProduct(currentProduct));
-                        System.out.println("c");
                         checkStatusBPP(portBPP);
                         ou1.write(location[0]);
                         TimeUnit.SECONDS.sleep(1);
@@ -117,6 +113,7 @@ public class StartProcess {
         try {
             System.out.println("reset request send");
             ou.write(4);
+            thrd.interrupt();
 
         } catch (IOException ignored) {}
     }

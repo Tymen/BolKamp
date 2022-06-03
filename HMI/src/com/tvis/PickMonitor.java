@@ -56,6 +56,26 @@ public class PickMonitor extends JPanel {
         setProductStatus();
 
         drawPath();
+
+        drawVisualLocatie();
+    }
+
+    public void drawVisualLocatie() {
+        canvas.setColor(Color.white);
+        canvas.setFont(new Font("Serif", Font.PLAIN, 15));
+
+        for (int i = 1; i <= 5; i++) {
+            Integer[] id = {i, 1};
+            StorageBox storageBox = getStorageBox(id);
+            canvas.drawString(String.valueOf(i), storageBox.getX() + 5, storageBox.getY() + 15);
+        }
+
+        for (int i = 1; i <= 5; i++) {
+            Integer[] id = {1, i};
+            StorageBox storageBox = getStorageBox(id);
+            String[] str = {"A", "B", "C", "D", "E"};
+            canvas.drawString(str[i - 1], storageBox.getX() + 15, storageBox.getY() + 25);
+        }
     }
 
     public void setProductStatus() {
